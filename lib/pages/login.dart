@@ -12,6 +12,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   String? _email, _password;
+  bool _seen = true;
   FirebaseAuth instance = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
@@ -60,40 +61,46 @@ class _LoginState extends State<Login> {
                                 border:
                                     Border.all(width: 2, color: Colors.black),
                                 borderRadius: BorderRadius.circular(40)),
-                            child: Row(children: [
-                              Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.35,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.08,
-                                  decoration: BoxDecoration(
-                                      color: Colors.black,
-                                      border: Border.all(
-                                          width: 2, color: Colors.black),
-                                      borderRadius: BorderRadius.circular(40)),
-                                  child: Center(
-                                    child: Text(
-                                      'Login',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 20),
-                                    ),
-                                  )),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => Register()));
-                                  },
-                                  child: Text(
-                                    'Register',
-                                    style: TextStyle(
-                                        fontSize: 20, color: Colors.black),
-                                  ))
-                            ]),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.40,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.08,
+                                      decoration: BoxDecoration(
+                                          color: Colors.black,
+                                          border: Border.all(
+                                              width: 2, color: Colors.black),
+                                          borderRadius:
+                                              BorderRadius.circular(40)),
+                                      child: Center(
+                                        child: Text(
+                                          'Login',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20),
+                                        ),
+                                      )),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Register()));
+                                      },
+                                      child: Text(
+                                        'Register',
+                                        style: TextStyle(
+                                            fontSize: 20, color: Colors.black),
+                                      ))
+                                ]),
                           ),
                           SizedBox(
                             height: 50,
@@ -111,7 +118,21 @@ class _LoginState extends State<Login> {
                             height: 10,
                           ),
                           TextField(
+                            obscureText: this._seen,
                             decoration: InputDecoration(
+                                suffixIcon: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      this._seen = !this._seen;
+                                    });
+                                  },
+                                  child: Icon(
+                                    this._seen
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                    color: Colors.grey,
+                                  ),
+                                ),
                                 hintText: 'Enter your password'),
                             onChanged: (value) {
                               setState(() {
