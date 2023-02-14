@@ -13,35 +13,39 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   String? _email, _password;
   bool _seen = true;
+
   FirebaseAuth instance = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
+          height: height,
+          width: width,
           color: Colors.black,
           child: SingleChildScrollView(
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.1,
+                height: height * 0.1,
               ),
               Center(
                 child: Text(
                   "Welcome!",
                   style: TextStyle(
-                      fontFamily: "font5", fontSize: 20, color: Colors.white70),
+                      fontFamily: "font1", fontSize: 20, color: Colors.white70),
                 ),
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
+                height: height * 0.01,
               ),
               Container(
-                height: MediaQuery.of(context).size.height * 0.8,
-                width: MediaQuery.of(context).size.width * 0.9,
+                height: height * 0.8,
+                width: width * 0.9,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(30)),
@@ -55,8 +59,8 @@ class _LoginState extends State<Login> {
                             height: 20,
                           ),
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.7,
-                            height: MediaQuery.of(context).size.height * 0.08,
+                            width: width * 0.7,
+                            height: height * 0.08,
                             decoration: BoxDecoration(
                                 border:
                                     Border.all(width: 2, color: Colors.black),
@@ -65,11 +69,8 @@ class _LoginState extends State<Login> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.40,
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.08,
+                                      width: width * 0.40,
+                                      height: height * 0.08,
                                       decoration: BoxDecoration(
                                           color: Colors.black,
                                           border: Border.all(
@@ -85,7 +86,7 @@ class _LoginState extends State<Login> {
                                         ),
                                       )),
                                   SizedBox(
-                                    width: 20,
+                                    width: width * 0.02,
                                   ),
                                   TextButton(
                                       onPressed: () {
@@ -150,21 +151,30 @@ class _LoginState extends State<Login> {
                               style: TextStyle(fontSize: 20),
                             ),
                             onPressed: () async {
-                              try {
-                                UserCredential credential =
-                                    await instance.signInWithEmailAndPassword(
-                                        email: _email!, password: _password!);
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => Home(),
-                                  ),
-                                );
-                              } on FirebaseAuthException catch (e) {
-                                if (e.code == 'user-not-found') {
-                                  print('user not found');
-                                } else if (e.code == 'wrong-password') {
-                                  print('wrong-password');
+                              if (this._email == null) {
+                                Dialogue(context, 'please enter your email');
+                              } else if (this._password == null) {
+                                Dialogue(context, 'please enter your password');
+                              } else {
+                                try {
+                                  UserCredential credential =
+                                      await instance.signInWithEmailAndPassword(
+                                          email: _email!, password: _password!);
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Home(),
+                                    ),
+                                  );
+                                } on FirebaseAuthException catch (e) {
+                                  if (e.code == 'user-not-found') {
+                                    Dialogue(context, 'there is no user corresponding to the given email.');
+                                  } else if (e.code == 'wrong-password') {
+                                    Dialogue(context,'wrong password');
+                                  }else if (e.code == 'invalid-email') {
+                                    Dialogue(context,
+                                        'the email address is not valid');
+                                  }
                                 }
                               }
                             },
