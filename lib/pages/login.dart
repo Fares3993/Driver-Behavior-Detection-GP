@@ -1,3 +1,4 @@
+import 'package:driver_behaviour_gp/Widgets.dart';
 import 'package:driver_behaviour_gp/pages/Home.dart';
 import 'package:driver_behaviour_gp/pages/register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,20 +19,19 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          height: height,
-          width: width,
+          height: getHeight(context, 1),
+          width: getWidth(context, 1),
           color: Colors.black,
           child: SingleChildScrollView(
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                height: height * 0.1,
+                height: getHeight(context, 0.1),
               ),
               Center(
                 child: Text(
@@ -41,11 +41,11 @@ class _LoginState extends State<Login> {
                 ),
               ),
               SizedBox(
-                height: height * 0.01,
+                height: getHeight(context, 0.01),
               ),
               Container(
-                height: height * 0.8,
-                width: width * 0.9,
+                height: getHeight(context,0.8),
+                width: getWidth(context, 0.9),
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(30)),
@@ -59,8 +59,8 @@ class _LoginState extends State<Login> {
                             height: 20,
                           ),
                           Container(
-                            width: width * 0.7,
-                            height: height * 0.08,
+                            width: getWidth(context,  0.7) ,
+                            height: getHeight(context, 0.055) ,
                             decoration: BoxDecoration(
                                 border:
                                     Border.all(width: 2, color: Colors.black),
@@ -69,8 +69,8 @@ class _LoginState extends State<Login> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Container(
-                                      width: width * 0.40,
-                                      height: height * 0.08,
+                                      width: getWidth(context, 0.40) ,
+                                      height: getHeight(context, 0.055) ,
                                       decoration: BoxDecoration(
                                           color: Colors.black,
                                           border: Border.all(
@@ -86,7 +86,7 @@ class _LoginState extends State<Login> {
                                         ),
                                       )),
                                   SizedBox(
-                                    width: width * 0.02,
+                                    width: getWidth(context, 0.02) ,
                                   ),
                                   TextButton(
                                       onPressed: () {
@@ -145,7 +145,7 @@ class _LoginState extends State<Login> {
                             height: 80,
                           ),
                           ElevatedButton(
-                            style: buttonStyle,
+                            style: getButtonStyle(200, 50,Colors.black),
                             child: Text(
                               'Login',
                               style: TextStyle(fontSize: 20),
@@ -191,8 +191,3 @@ class _LoginState extends State<Login> {
   }
 }
 
-ButtonStyle buttonStyle = ElevatedButton.styleFrom(
-    minimumSize: Size(200, 50),
-    backgroundColor: Colors.black,
-    shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(50))));

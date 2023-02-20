@@ -1,3 +1,4 @@
+import 'package:driver_behaviour_gp/Widgets.dart';
 import 'package:driver_behaviour_gp/pages/Home.dart';
 import 'package:driver_behaviour_gp/pages/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -60,7 +61,7 @@ class _RegisterState extends State<Register> {
                           ),
                           Container(
                             width: MediaQuery.of(context).size.width * 0.7,
-                            height: MediaQuery.of(context).size.height * 0.08,
+                            height: MediaQuery.of(context).size.height * 0.055,
                             decoration: BoxDecoration(
                                 border:
                                     Border.all(width: 2, color: Colors.black),
@@ -89,7 +90,7 @@ class _RegisterState extends State<Register> {
                                           0.40,
                                       height:
                                           MediaQuery.of(context).size.height *
-                                              0.08,
+                                              0.055,
                                       decoration: BoxDecoration(
                                           color: Colors.black,
                                           border: Border.all(
@@ -167,7 +168,7 @@ class _RegisterState extends State<Register> {
                             height: 80,
                           ),
                           ElevatedButton(
-                            style: buttonStyle,
+                            style: getButtonStyle(200, 50,Colors.black),
                             child: Text(
                               'Register',
                               style: TextStyle(fontSize: 20),

@@ -38,6 +38,9 @@ dependencies:
   firebase_core:
   firebase_auth:
   cloud_firestore:
+  image_picker: ^0.8.6+1
+  video_player: ^2.5.1
+
 
 dev_dependencies:
   flutter_test:
@@ -82,9 +85,12 @@ flutter:
     - family: font1
       fonts:
           - asset: lib/Fonts/font1.ttf
-    - family: font1
+    - family: font2
       fonts:
-          - asset: lib/Fonts/font1.ttf
+          - asset: lib/Fonts/font2.ttf
+    - family: MyFlutterApp
+      fonts:
+          - asset: lib/Fonts/MyFlutterApp.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
