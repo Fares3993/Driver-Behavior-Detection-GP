@@ -6,6 +6,7 @@ import 'package:driver_behaviour_gp/pages/videoPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:driver_behaviour_gp/my_flutter_app_icons.dart';
+
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -32,6 +33,9 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+
+
+
     double h = getHeight(context, 0.01);
     return Scaffold(
       drawer: Drawer(
@@ -104,7 +108,9 @@ class _HomeState extends State<Home> {
                 style: TextStyle(fontSize: 25,fontFamily: 'font2'),
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>VideoPage()));
+                Navigator.pushNamed(context, '/videoPage',arguments: "Open Camera");
+
+
               },
             ),
             SizedBox(height: getHeight(context, 0.03),),
@@ -115,7 +121,9 @@ class _HomeState extends State<Home> {
                 'Recorded Video',
                 style: TextStyle(fontSize: 25,fontFamily: 'font2'),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/videoPage',arguments: "Recorded Video");
+              },
             ),
           ],
         ),
@@ -123,3 +131,5 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
+
