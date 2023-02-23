@@ -1,6 +1,8 @@
 import 'package:driver_behaviour_gp/Widgets.dart';
 import 'package:driver_behaviour_gp/pages/AddContact.dart';
+import 'package:driver_behaviour_gp/pages/AlertSounds.dart';
 import 'package:driver_behaviour_gp/pages/Communication.dart';
+import 'package:driver_behaviour_gp/pages/Help.dart';
 import 'package:driver_behaviour_gp/pages/login.dart';
 import 'package:driver_behaviour_gp/pages/videoPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -44,7 +46,7 @@ class _HomeState extends State<Home> {
             ListTile(
               leading: Icon(Icons.add_alert_sharp,color: Colors.black,),
               title: Text('Alert Sounds'),
-              onTap: () {},
+              onTap: () =>Navigator.push(context, MaterialPageRoute(builder: (context)=>AlertSounds())),
             ),
             div(h),
             ListTile(
@@ -56,7 +58,7 @@ class _HomeState extends State<Home> {
             ListTile(
               leading: Icon(Icons.help_outline,color: Colors.black,),
               title: Text('Help'),
-              onTap: () {},
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>HelpScreen())),
             ),
             div(h),
             ListTile(
