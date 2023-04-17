@@ -40,6 +40,8 @@ dependencies:
   cloud_firestore:
   image_picker: ^0.8.6+1
   video_player: ^2.5.1
+  camera:
+  provider:
 
 
 dev_dependencies:

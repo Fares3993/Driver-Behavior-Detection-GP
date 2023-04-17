@@ -52,7 +52,7 @@ class _HomeState extends State<Home> {
             ListTile(
               leading: Icon(Icons.add_ic_call,color: Colors.black,),
               title: Text('Add more contact'),
-              onTap: () =>Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AddContact())),
+              onTap: () =>Navigator.push(context, MaterialPageRoute(builder: (context)=>AddContact())),
             ),
             div(h),
             ListTile(
