@@ -5,28 +5,28 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:http/http.dart' as http;
-
+import 'dart:ui';
 
 class CameraScreen extends StatefulWidget {
   final List<CameraDescription> cameras;
-  const CameraScreen({Key? key,required this.cameras}) : super(key: key);
+
+  const CameraScreen({Key? key, required this.cameras}) : super(key: key);
 
   @override
   State<CameraScreen> createState() => _CameraScreenState();
 }
 
 class _CameraScreenState extends State<CameraScreen> {
-
   CameraController? _controller;
   int _timer = 3;
-  Timer ?_photoTimer;
-  Completer<void> ?_previousCaptureCompleter;
+  Timer? _photoTimer;
+  Completer<void>? _previousCaptureCompleter;
   File? selectedImage;
   String? message = "";
 
-  uploadImage() async{
+  uploadImage() async {
     final request = http.MultipartRequest(
-        "POST", Uri.parse("https://d034-102-188-141-35.eu.ngrok.io/upload"));
+        "POST", Uri.parse("https://f964-41-69-3-235.eu.ngrok.io/upload"));
     final headers = {"Content-type": "multipart/form-data"};
     request.files.add(http.MultipartFile('image',
         selectedImage!.readAsBytes().asStream(), selectedImage!.lengthSync(),
@@ -36,15 +36,17 @@ class _CameraScreenState extends State<CameraScreen> {
     http.Response res = await http.Response.fromStream(response);
     final resjason = jsonDecode(res.body);
     message = resjason['message'];
-    print("################################################################## $message");
+    print(
+        "################################################################## $message");
     setState(() {});
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    _controller = CameraController(widget.cameras ![0], ResolutionPreset.medium);
+    _controller = CameraController(widget.cameras![0], ResolutionPreset.medium);
     _controller!.setFlashMode(FlashMode.off);
     _controller!.initialize().then((_) {
       if (!mounted) {
@@ -53,6 +55,7 @@ class _CameraScreenState extends State<CameraScreen> {
       setState(() {});
     });
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -60,6 +63,7 @@ class _CameraScreenState extends State<CameraScreen> {
     _photoTimer?.cancel();
     super.dispose();
   }
+
   Future<void> _takePicture() async {
     await _previousCaptureCompleter?.future;
 
@@ -69,24 +73,22 @@ class _CameraScreenState extends State<CameraScreen> {
     try {
       // Ensure that the camera is initialized.
       await _controller!.initialize();
-
+      _controller!.setFlashMode(FlashMode.off);
       // Take the picture.
       final XFile file = await _controller!.takePicture();
       selectedImage = File(file.path);
       // Save the picture to the device's gallery.
       //final result = await ImageGallerySaver.saveFile(file.path);
       //print('Picture saved to gallery: $result');
-      setState(() {
-
-      });
+      setState(() {});
       uploadImage();
       completer.complete();
-
     } catch (e) {
       print('Error taking picture: $e');
     }
   }
-  void _startTimer() async{
+
+  void _startTimer() async {
     _photoTimer = Timer.periodic(Duration(seconds: _timer), (timer) {
       _takePicture();
     });
@@ -102,37 +104,105 @@ class _CameraScreenState extends State<CameraScreen> {
       return Container();
     }
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Camera Demo'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(
-              height: 200,
-              width: 300,
-              child: CameraPreview(_controller!),
-            ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: _startTimer,
-                  child: Text('Start'),
+      backgroundColor: Colors.black,
+      // appBar: AppBar(
+      //   title: Text('Camera Demo'),
+      // ),
+      body: Container(
+        height: double.infinity,
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('lib/Images/home.jpg'), fit: BoxFit.cover),
+        ),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                  sigmaX: 1,
+                  sigmaY: 1,
                 ),
-                ElevatedButton(
-                  onPressed: _stopTimer,
-                  child: Text('Stop'),
-                ),
-              ],
+                child: Container(color: Colors.black.withOpacity(0.2)),
+              ),
             ),
-            TextField(
-              readOnly: true,
-              controller: TextEditingController(text: message),
-              style: TextStyle(color: Colors.pink,fontSize: 16,fontWeight: FontWeight.bold),
-            )
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 100),
+                  Container(
+                    height: 250,
+                    width: 350,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.white.withOpacity(0.2),
+                        width: 15.0,
+                      ),
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: CameraPreview(_controller!),
+                  ),
+                  SizedBox(
+                    height: 150,
+                  ),
+                  Container(
+                    child: buildBlur(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        width: 300,
+                        height: 60,
+                        padding: EdgeInsets.all(5),
+                        color: Colors.white.withOpacity(0.4),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            TextButton(
+                                onPressed: _startTimer,
+                                child: Text('Start',
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      //fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ))),
+
+                            TextButton(
+                                onPressed: _stopTimer,
+                                child: Text('Stop',
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      //fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ))),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  buildBlur(
+                    borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    width: 300,
+                    height: 60,
+                    padding: EdgeInsets.all(5),
+                    color: Colors.white.withOpacity(0.4),
+                    child: Center(
+                      child: Text(
+                        message!,
+                        style: TextStyle(
+                          fontSize: 25,
+                          //fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),)
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -140,8 +210,19 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 }
 
-
-
+Widget buildBlur({
+  required Widget child,
+  required BorderRadius borderRadius,
+  double sigmaX = 10,
+  double sigmaY = 10,
+}) =>
+    ClipRRect(
+      borderRadius: borderRadius ?? BorderRadius.zero,
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: sigmaX, sigmaY: sigmaY),
+        child: child,
+      ),
+    );
 // // import 'dart:async';
 // // import 'dart:convert';
 // // import 'dart:io';
