@@ -1,6 +1,8 @@
+import 'package:camera/camera.dart';
 import 'package:driver_behaviour_gp/Widgets.dart';
 import 'package:driver_behaviour_gp/pages/AddContact.dart';
 import 'package:driver_behaviour_gp/pages/AlertSounds.dart';
+import 'package:driver_behaviour_gp/pages/CameraScreen.dart';
 import 'package:driver_behaviour_gp/pages/Communication.dart';
 import 'package:driver_behaviour_gp/pages/Help.dart';
 import 'package:driver_behaviour_gp/pages/login.dart';
@@ -10,7 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:driver_behaviour_gp/my_flutter_app_icons.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final List<CameraDescription> cameras;
+  const Home({super.key,required this.cameras});
 
   @override
   State<Home> createState() => _HomeState();
@@ -27,7 +30,7 @@ class _HomeState extends State<Home> {
       if (user == null) {
         print('no user');
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Login()));
+            context, MaterialPageRoute(builder: (context) => Login(cameras: widget.cameras,)));
       } else
         print('there is a user');
     });
@@ -110,9 +113,7 @@ class _HomeState extends State<Home> {
                 style: TextStyle(fontSize: 25,fontFamily: 'font2'),
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/videoPage',arguments: "Open Camera");
-
-
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>CameraScreen(cameras: widget.cameras)));
               },
             ),
             SizedBox(height: getHeight(context, 0.03),),

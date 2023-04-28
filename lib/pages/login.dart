@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:driver_behaviour_gp/Widgets.dart';
 import 'package:driver_behaviour_gp/pages/Home.dart';
 import 'package:driver_behaviour_gp/pages/register.dart';
@@ -5,7 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
-  const Login({super.key});
+  final List<CameraDescription> cameras;
+  const Login({super.key,required this.cameras});
 
   @override
   State<Login> createState() => _LoginState();
@@ -94,7 +96,7 @@ class _LoginState extends State<Login> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    Register()));
+                                                    Register(cameras: widget.cameras,)));
                                       },
                                       child: Text(
                                         'Register',
@@ -163,7 +165,7 @@ class _LoginState extends State<Login> {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => Home(),
+                                      builder: (context) => Home(cameras: widget.cameras,),
                                     ),
                                   );
                                 } on FirebaseAuthException catch (e) {

@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:driver_behaviour_gp/Widgets.dart';
 import 'package:driver_behaviour_gp/pages/Home.dart';
 import 'package:driver_behaviour_gp/pages/login.dart';
@@ -5,7 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
-  const Register({super.key});
+  final List<CameraDescription> cameras;
+  const Register({super.key,required this.cameras});
 
   @override
   State<Register> createState() => _RegisterState();
@@ -74,7 +76,7 @@ class _RegisterState extends State<Register> {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) => Login()));
+                                                builder: (context) => Login(cameras: widget.cameras,)));
                                       },
                                       child: Text(
                                         'Login',
@@ -202,7 +204,7 @@ class _RegisterState extends State<Register> {
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => Home()));
+                                          builder: (context) => Home(cameras: widget.cameras,)));
                                 } on FirebaseAuthException catch (e) {
                                   if (e.code == 'weak-password') {
                                     Dialogue(context,

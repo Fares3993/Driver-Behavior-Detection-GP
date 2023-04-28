@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:driver_behaviour_gp/Widgets.dart';
 import 'package:driver_behaviour_gp/pages/Home.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +105,7 @@ class _AddContactState extends State<AddContact> {
                           style: TextStyle(fontSize: 25,fontFamily: 'font2',color: Colors.black),
                         ),
                         onPressed: () {
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Home()));
+                          Navigator.pop(context);
                         },
                       ),
                     ),
