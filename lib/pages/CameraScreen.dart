@@ -26,7 +26,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
   uploadImage() async {
     final request = http.MultipartRequest(
-        "POST", Uri.parse("https://f964-41-69-3-235.eu.ngrok.io/upload"));
+        "POST", Uri.parse("https://af73-102-188-107-183.eu.ngrok.io/upload"));
     final headers = {"Content-type": "multipart/form-data"};
     request.files.add(http.MultipartFile('image',
         selectedImage!.readAsBytes().asStream(), selectedImage!.lengthSync(),
@@ -184,22 +184,22 @@ class _CameraScreenState extends State<CameraScreen> {
                   ),
                   buildBlur(
                     borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                    width: 300,
-                    height: 60,
-                    padding: EdgeInsets.all(5),
-                    color: Colors.white.withOpacity(0.4),
-                    child: Center(
-                      child: Text(
-                        message!,
-                        style: TextStyle(
-                          fontSize: 25,
-                          //fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                    child: Container(
+                      width: 300,
+                      height: 60,
+                      padding: EdgeInsets.all(5),
+                      color: Colors.white.withOpacity(0.4),
+                      child: Center(
+                        child: Text(
+                          message!,
+                          style: TextStyle(
+                            fontSize: 25,
+                            //fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                    ),
-                  ),)
+                    ),)
                 ],
               ),
             ),
