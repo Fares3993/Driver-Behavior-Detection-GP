@@ -5,6 +5,7 @@ import 'package:driver_behaviour_gp/pages/AlertSounds.dart';
 import 'package:driver_behaviour_gp/pages/CameraScreen.dart';
 import 'package:driver_behaviour_gp/pages/Communication.dart';
 import 'package:driver_behaviour_gp/pages/Help.dart';
+import 'package:driver_behaviour_gp/pages/email.dart';
 import 'package:driver_behaviour_gp/pages/login.dart';
 import 'package:driver_behaviour_gp/pages/videoPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -125,7 +126,8 @@ class _HomeState extends State<Home> {
                 style: TextStyle(fontSize: 25,fontFamily: 'font2'),
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/videoPage',arguments: "Recorded Video");
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> EmailScreen()));
+                //Navigator.pushNamed(context, '/videoPage',arguments: "Recorded Video");
               },
             ),
           ],
