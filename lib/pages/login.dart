@@ -153,6 +153,7 @@ class _LoginState extends State<Login> {
                               style: TextStyle(fontSize: 20),
                             ),
                             onPressed: () async {
+
                               if (this._email == null) {
                                 Dialogue(context, 'please enter your email');
                               } else if (this._password == null) {

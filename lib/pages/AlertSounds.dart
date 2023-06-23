@@ -1,4 +1,7 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class AlertSounds extends StatefulWidget {
   const AlertSounds({Key? key}) : super(key: key);
@@ -8,11 +11,27 @@ class AlertSounds extends StatefulWidget {
 }
 
 class _AlertSoundsState extends State<AlertSounds> {
-  String? Value;
-  List Items = ['Sound1', 'Sound2', 'Sound3', 'Sound4', 'Sound5'];
+  final player = AudioCache();
+  String? Value = 'Sound 1';
+  SharedPreferences ?prefs;
+  saveData(String value) async{
+    prefs = await SharedPreferences.getInstance();
+    prefs!.setString('sound', value);
+  }
+  getData() async{
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      Value= prefs!.getString('sound')??'Sound 1';
+    });
+
+  }
+  AudioPlayer? audioPlayer = null;
+
+  List Items = ['Sound 1', 'Sound 2', 'Sound 3', 'Sound 4', 'Sound 5'];
 
   @override
   Widget build(BuildContext context) {
+    getData();
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(50),
@@ -36,7 +55,7 @@ class _AlertSoundsState extends State<AlertSounds> {
               Padding(
                 padding: const EdgeInsets.all(30),
                 child: Container(
-                  padding: EdgeInsets.only(left: 16,right: 16),
+                  padding: EdgeInsets.only(left: 16, right: 16),
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           fit: BoxFit.cover,
@@ -47,20 +66,32 @@ class _AlertSoundsState extends State<AlertSounds> {
                     icon: Icon(Icons.keyboard_arrow_down_sharp),
                     iconSize: 30,
                     isExpanded: true,
-                    hint: Text('Default'),
-                    style: TextStyle(fontSize: 22,color: Colors.black),
+                    hint: Text(Value!),
+                    style: TextStyle(fontSize: 22, color: Colors.black),
                     items: Items.map((valueItem) {
                       return DropdownMenuItem(
                           value: valueItem, child: Text(valueItem));
                     }).toList(),
-                    onChanged: (newValue) {
+                    onChanged: (newValue) async{
+                      if(audioPlayer != null)
+                        {
+                          audioPlayer?.stop();
+                        }
+                      audioPlayer = await player.play('${newValue as String}.mp3');
                       setState(() {
                         Value = newValue as String?;
+                        saveData(Value!);
                       });
                     },
                   ),
                 ),
-              )
+              ),
+              // ElevatedButton(
+              //     onPressed: () {
+              //       final player = AudioCache();
+              //       player.play('Sound 1.mp3');
+              //     },
+              //     child: Text("Start Sound"))
             ],
           ),
         ),
