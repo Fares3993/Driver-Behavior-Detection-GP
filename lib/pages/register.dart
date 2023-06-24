@@ -1,11 +1,69 @@
 import 'package:camera/camera.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:driver_behaviour_gp/Widgets.dart';
 import 'package:driver_behaviour_gp/pages/Home.dart';
 import 'package:driver_behaviour_gp/pages/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+
+class UserData1 {
+  final String name;
+  final String userEmail;
+  final String contactEmail;
+  final String userPhone;
+  
+
+
+  UserData1({required this.name,  required this.userEmail,required this.contactEmail, required this.userPhone});
+
+  // Convert User object to a map
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'userEmail': userEmail,
+      'contactEmail': contactEmail,
+      'userPhone': userPhone,
+
+
+    };
+  }
+
+  // Create User object from a Firestore document snapshot
+  factory UserData1.fromSnapshot(DocumentSnapshot snapshot) {
+    final data1 = snapshot.data() as Map<String, dynamic>;
+    return UserData1(
+      name: data1['name'],
+      userEmail: data1['userEmail'],
+      contactEmail: data1['contactEmail'],
+      userPhone: data1['userPhone'],
+
+    );
+  }
+}
+
+class UserService1 {
+  final CollectionReference usersCollection =
+  FirebaseFirestore.instance.collection('users');
+
+  Future<void> addUser1(UserData1 user) async {
+    await usersCollection.doc(user.userEmail).set(user.toMap());
+  }
+
+  Future<List<UserData1>> getUsers() async {
+    final querySnapshot = await usersCollection.get();
+    return querySnapshot.docs.map((doc) => UserData1.fromSnapshot(doc)).toList();
+  }
+  Future<UserData1?> getUserByEmail(String email) async {
+    final docSnapshot = await usersCollection.doc(email).get();
+    if (docSnapshot.exists) {
+      return UserData1.fromSnapshot(docSnapshot);
+    }
+    return null;
+  }
+}
 class Register extends StatefulWidget {
+
   final List<CameraDescription> cameras;
   const Register({super.key,required this.cameras});
 
@@ -14,9 +72,25 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  String? _email, _password, _confirmPassword, _name;
+  String? _password, _confirmPassword;
   bool _seen = true;
   FirebaseAuth instance = FirebaseAuth.instance;
+  final UserService1 userService = UserService1();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController userEmailController = TextEditingController();
+  final TextEditingController contactEmailController = TextEditingController();
+  final TextEditingController userPhoneController = TextEditingController();
+
+
+  void addUser1() {
+    final user = UserData1(
+      name: nameController.text,
+      userEmail: userEmailController.text,
+      contactEmail: contactEmailController.text,
+      userPhone: userPhoneController.text,
+    );
+     userService.addUser1(user);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,23 +185,52 @@ class _RegisterState extends State<Register> {
                           ),
                           SizedBox(height: 50),
                           TextField(
+                            controller: nameController,
                             decoration: InputDecoration(hintText: 'user name'),
-                            onChanged: (value) {
-                              setState(() {
-                                this._name = value;
-                              });
-                            },
+                            // onChanged: (value) {
+                            //   setState(() {
+                            //     this.nameController.text = value;
+                            //   });
+                            // },
                           ),
                           SizedBox(
                             height: 10,
                           ),
                           TextField(
-                            decoration: InputDecoration(hintText: 'email'),
-                            onChanged: (value) {
-                              setState(() {
-                                this._email = value;
-                              });
-                            },
+                            controller: userEmailController,
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(hintText: 'user email'),
+                            // onChanged: (value) {
+                            //   setState(() {
+                            //     this.userEmailController.text = value;
+                            //   });
+                            // },
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextField(
+                            controller: contactEmailController,
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(hintText: 'contact email'),
+                            // onChanged: (value) {
+                            //   setState(() {
+                            //     this.contactEmailController.text = value;
+                            //   });
+                            // },
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextField(
+                            controller: userPhoneController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(hintText: 'user phone'),
+                            // onChanged: (value) {
+                            //   setState(() {
+                            //     this.userPhoneController.text = value;
+                            //   });
+                            // },
                           ),
                           SizedBox(
                             height: 10,
@@ -167,8 +270,10 @@ class _RegisterState extends State<Register> {
                             },
                           ),
                           SizedBox(
-                            height: 80,
+                            height: 50,
                           ),
+                          //TextButton(onPressed: addUser1, child: Text("Confirm??",style: TextStyle( fontSize: 20, color: Colors.black),)),
+                          SizedBox(height: 10,),
                           ElevatedButton(
                             style: getButtonStyle(200, 50,Colors.black),
                             child: Text(
@@ -176,14 +281,26 @@ class _RegisterState extends State<Register> {
                               style: TextStyle(fontSize: 20),
                             ),
                             onPressed: () async {
+                              addUser1();
+                              print("############################################################################");
+                              print("user name = ${nameController.text}\t userPhoneController = ${userPhoneController.text}.\nuserEmailController = ${userEmailController.text}\tcontactEmailController = ${contactEmailController.text}");
+                              print("############################################################################");
 
-                              if(this._name == null )
+                              if(this.nameController.text == null )
                               {
                                 Dialogue(context, 'please enter your name');
                               }
-                              else if(this._email == null )
+                              else if(this.userEmailController.text == null )
                               {
                                 Dialogue(context, 'please enter your email');
+                              }
+                              else if(this.contactEmailController.text == null )
+                              {
+                                Dialogue(context, 'please enter your contact email');
+                              }
+                              else if(this.userPhoneController.text == null )
+                              {
+                                Dialogue(context, 'please enter your phone number');
                               }
                               else if(this._password == null )
                               {
@@ -198,9 +315,11 @@ class _RegisterState extends State<Register> {
                               }
                               else {
                                 try {
+
                                   UserCredential credential = await instance
                                       .createUserWithEmailAndPassword(
-                                          email: _email!, password: _password!);
+                                          email: userEmailController.text!, password: _password!);
+                                  addUser1;
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
@@ -218,6 +337,7 @@ class _RegisterState extends State<Register> {
                                   }
                                 }
                               }
+
                             },
                           ),
                         ]),

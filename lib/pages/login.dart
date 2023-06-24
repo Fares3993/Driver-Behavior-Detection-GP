@@ -109,6 +109,7 @@ class _LoginState extends State<Login> {
                             height: 50,
                           ),
                           TextField(
+                            keyboardType: TextInputType.emailAddress,
                             decoration:
                                 InputDecoration(hintText: 'Enter your email'),
                             onChanged: (value) {

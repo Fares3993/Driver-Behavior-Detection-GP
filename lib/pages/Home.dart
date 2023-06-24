@@ -126,7 +126,7 @@ class _HomeState extends State<Home> {
                 style: TextStyle(fontSize: 25,fontFamily: 'font2'),
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> EmailScreen()));
+                //Navigator.push(context, MaterialPageRoute(builder: (context)=> EmailScreen()));
                 //Navigator.pushNamed(context, '/videoPage',arguments: "Recorded Video");
               },
             ),
