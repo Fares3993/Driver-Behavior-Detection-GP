@@ -12,10 +12,12 @@ class UserData1 {
   final String userEmail;
   final String contactEmail;
   final String userPhone;
-  
+  String? contactEmail1;
+  String? contactEmail2;
+  String? contactEmail3;
 
 
-  UserData1({required this.name,  required this.userEmail,required this.contactEmail, required this.userPhone});
+  UserData1({required this.name,  required this.userEmail,required this.contactEmail, required this.userPhone,this.contactEmail1,this.contactEmail2,this.contactEmail3});
 
   // Convert User object to a map
   Map<String, dynamic> toMap() {
@@ -24,8 +26,9 @@ class UserData1 {
       'userEmail': userEmail,
       'contactEmail': contactEmail,
       'userPhone': userPhone,
-
-
+      'contactEmail1':contactEmail1,
+      'contactEmail2':contactEmail2,
+      'contactEmail3':contactEmail3,
     };
   }
 
@@ -37,7 +40,6 @@ class UserData1 {
       userEmail: data1['userEmail'],
       contactEmail: data1['contactEmail'],
       userPhone: data1['userPhone'],
-
     );
   }
 }
@@ -61,6 +63,15 @@ class UserService1 {
     }
     return null;
   }
+  Future<void> addContactToUser(String email, String ContactEmail,int index) async {
+    final userQuery =
+    await usersCollection.where('userEmail', isEqualTo: email).get();
+    if (userQuery.docs.isNotEmpty) {
+      final userDoc = userQuery.docs.first;
+      await userDoc.reference.update({'contactEmail$index': ContactEmail});
+    }
+  }
+
 }
 class Register extends StatefulWidget {
 

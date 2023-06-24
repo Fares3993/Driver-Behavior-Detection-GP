@@ -92,45 +92,47 @@ class _HomeState extends State<Home> {
           image: DecorationImage(
               image: AssetImage('lib/Images/home.jpg'), fit: BoxFit.cover),
         ),
-        child: Column(
-          children: [
-            SizedBox(
-              height: getHeight(context, 0.38),
-            ),
-            Text(
-              'Start Your Safety Trip',
-              style: TextStyle(
-                  fontSize: 25,
-                  fontFamily: 'font2',
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: getHeight(context, 0.2),),
-
-            ElevatedButton(
-              style: getButtonStyle(250, 50,Colors.black),
-              child: Text(
-                'Open Camera',
-                style: TextStyle(fontSize: 25,fontFamily: 'font2'),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: getHeight(context, 0.38),
               ),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>CameraScreen(cameras: widget.cameras)));
-              },
-            ),
-            SizedBox(height: getHeight(context, 0.03),),
-
-            ElevatedButton(
-              style: getButtonStyle(250, 50,Colors.black),
-              child: Text(
-                'Recorded Video',
-                style: TextStyle(fontSize: 25,fontFamily: 'font2'),
+              Text(
+                'Start Your Safety Trip',
+                style: TextStyle(
+                    fontSize: 25,
+                    fontFamily: 'font2',
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
               ),
-              onPressed: () {
-                //Navigator.push(context, MaterialPageRoute(builder: (context)=> EmailScreen()));
-                //Navigator.pushNamed(context, '/videoPage',arguments: "Recorded Video");
-              },
-            ),
-          ],
+              SizedBox(height: getHeight(context, 0.2),),
+
+              ElevatedButton(
+                style: getButtonStyle(250, 50,Colors.black),
+                child: Text(
+                  'Open Camera',
+                  style: TextStyle(fontSize: 25,fontFamily: 'font2'),
+                ),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>CameraScreen(cameras: widget.cameras)));
+                },
+              ),
+              SizedBox(height: getHeight(context, 0.03),),
+
+              ElevatedButton(
+                style: getButtonStyle(250, 50,Colors.black),
+                child: Text(
+                  'Recorded Video',
+                  style: TextStyle(fontSize: 25,fontFamily: 'font2'),
+                ),
+                onPressed: () {
+                  //Navigator.push(context, MaterialPageRoute(builder: (context)=> EmailScreen()));
+                  //Navigator.pushNamed(context, '/videoPage',arguments: "Recorded Video");
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

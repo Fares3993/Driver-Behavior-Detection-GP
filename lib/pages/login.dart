@@ -4,6 +4,9 @@ import 'package:driver_behaviour_gp/pages/Home.dart';
 import 'package:driver_behaviour_gp/pages/register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../main.dart';
 
 class Login extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -13,15 +16,17 @@ class Login extends StatefulWidget {
   State<Login> createState() => _LoginState();
 }
 
+
 class _LoginState extends State<Login> {
-  String? _email, _password;
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   bool _seen = true;
 
   FirebaseAuth instance = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
-
+    final stringData = Provider.of<StringData>(context);
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -110,13 +115,9 @@ class _LoginState extends State<Login> {
                           ),
                           TextField(
                             keyboardType: TextInputType.emailAddress,
+                            controller: emailController,
                             decoration:
                                 InputDecoration(hintText: 'Enter your email'),
-                            onChanged: (value) {
-                              setState(() {
-                                this._email = value;
-                              });
-                            },
                           ),
                           SizedBox(
                             height: 10,
@@ -138,11 +139,7 @@ class _LoginState extends State<Login> {
                                   ),
                                 ),
                                 hintText: 'Enter your password'),
-                            onChanged: (value) {
-                              setState(() {
-                                this._password = value;
-                              });
-                            },
+                            controller: passwordController,
                           ),
                           SizedBox(
                             height: 80,
@@ -154,16 +151,16 @@ class _LoginState extends State<Login> {
                               style: TextStyle(fontSize: 20),
                             ),
                             onPressed: () async {
-
-                              if (this._email == null) {
+                              stringData.updateValue(emailController.text!);
+                              if (this.emailController.text == null) {
                                 Dialogue(context, 'please enter your email');
-                              } else if (this._password == null) {
+                              } else if (this.passwordController.text == null) {
                                 Dialogue(context, 'please enter your password');
                               } else {
                                 try {
                                   UserCredential credential =
                                       await instance.signInWithEmailAndPassword(
-                                          email: _email!, password: _password!);
+                                          email: emailController.text!, password: passwordController.text!);
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
