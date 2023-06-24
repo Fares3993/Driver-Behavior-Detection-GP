@@ -64,7 +64,7 @@ class _CameraScreenState extends State<CameraScreen> {
   uploadImage() async {
 
     final request = http.MultipartRequest(
-        "POST", Uri.parse("https://7036-102-188-107-183.eu.ngrok.io/upload"));
+        "POST", Uri.parse("https://4720-102-188-107-183.eu.ngrok.io/upload"));
     final headers = {"Content-type": "multipart/form-data"};
     request.files.add(http.MultipartFile('image',
         selectedImage!.readAsBytes().asStream(), selectedImage!.lengthSync(),
