@@ -126,13 +126,15 @@ class _CameraScreenState extends State<CameraScreen> {
       uploadImage();
 
       if (message != "safe driving") {
-        print("################################ audioPlayer =  ${audioPlayer} ##################################");
         if(audioPlayer != null)
           {
             audioPlayer?.stop();
           }
+        if(alert=="")
+          {
+            alert = "Sound 1";
+          }
         audioPlayer = await player.play("${alert}.mp3");
-        print("################################ ${alert}.mp3 ##################################");
       }
       completer.complete();
     } catch (e) {
@@ -149,9 +151,7 @@ class _CameraScreenState extends State<CameraScreen> {
   void _stopTimer() {
     _photoTimer?.cancel();
   }
-
   String testEmailMessage = "test";
-
   @override
   Widget build(BuildContext context) {
     if (!_controller!.value.isInitialized) {

@@ -36,6 +36,7 @@ class _AlertSoundsState extends State<AlertSounds> {
   Widget build(BuildContext context) {
     final alertSound = Provider.of<StringData>(context);
     getData();
+    alertSound.updateAlert(Value as String);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(50),
@@ -77,7 +78,6 @@ class _AlertSoundsState extends State<AlertSounds> {
                           value: valueItem, child: Text(valueItem));
                     }).toList(),
                     onChanged: (newValue) async{
-                      alertSound.updateAlert(newValue as String);
                       if(audioPlayer != null)
                         {
                           audioPlayer?.stop();

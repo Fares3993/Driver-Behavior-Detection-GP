@@ -18,8 +18,10 @@ class StringData extends ChangeNotifier {
     });
   }
   void updateAlert(String newAlert) {
-    _alert = newAlert;
-    notifyListeners();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _alert = newAlert;
+      notifyListeners();
+    });
   }
 }
 List<CameraDescription> ?cameras;
