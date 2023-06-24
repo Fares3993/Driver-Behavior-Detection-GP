@@ -1,6 +1,9 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../main.dart';
 
 
 class AlertSounds extends StatefulWidget {
@@ -31,7 +34,7 @@ class _AlertSoundsState extends State<AlertSounds> {
 
   @override
   Widget build(BuildContext context) {
-
+    final alertSound = Provider.of<StringData>(context);
     getData();
     return Scaffold(
       body: Padding(
@@ -74,6 +77,7 @@ class _AlertSoundsState extends State<AlertSounds> {
                           value: valueItem, child: Text(valueItem));
                     }).toList(),
                     onChanged: (newValue) async{
+                      alertSound.updateAlert(newValue as String);
                       if(audioPlayer != null)
                         {
                           audioPlayer?.stop();

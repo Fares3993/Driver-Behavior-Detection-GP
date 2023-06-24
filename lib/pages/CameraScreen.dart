@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:driver_behaviour_gp/pages/register.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -29,22 +30,18 @@ Future<List<dynamic>> getContactEmail(String userEmail) async {
 
   if (user != null) {
     contactsEmail.add(user.contactEmail);
-    if(user.contactEmail1 != null)
-      {
-        contactsEmail.add(user.contactEmail1);
-      }
-    if(user.contactEmail2 != null)
-    {
+    if (user.contactEmail1 != null) {
+      contactsEmail.add(user.contactEmail1);
+    }
+    if (user.contactEmail2 != null) {
       contactsEmail.add(user.contactEmail2);
     }
-    if(user.contactEmail3 != null)
-    {
+    if (user.contactEmail3 != null) {
       contactsEmail.add(user.contactEmail3);
     }
   }
   return contactsEmail;
 }
-
 
 sendEmail(String subject, String body, String recipient) async {
   final Email email = Email(
@@ -65,8 +62,9 @@ class _CameraScreenState extends State<CameraScreen> {
   String? message = "";
 
   uploadImage() async {
+
     final request = http.MultipartRequest(
-        "POST", Uri.parse("https://4d60-102-188-107-183.eu.ngrok.io/upload"));
+        "POST", Uri.parse("https://7036-102-188-107-183.eu.ngrok.io/upload"));
     final headers = {"Content-type": "multipart/form-data"};
     request.files.add(http.MultipartFile('image',
         selectedImage!.readAsBytes().asStream(), selectedImage!.lengthSync(),
@@ -76,13 +74,11 @@ class _CameraScreenState extends State<CameraScreen> {
     http.Response res = await http.Response.fromStream(response);
     final resjason = jsonDecode(res.body);
     message = resjason['message'];
-    if(message != "safe driving")
-      {
 
-      }
-    print(
-        "################################################################## $message");
-    setState(() {});
+
+    setState(() {
+
+    });
   }
 
   @override
@@ -107,8 +103,10 @@ class _CameraScreenState extends State<CameraScreen> {
     _photoTimer?.cancel();
     super.dispose();
   }
+  final player = AudioCache();
+  AudioPlayer ?audioPlayer = null;
+  Future<void> _takePicture(String alert) async {
 
-  Future<void> _takePicture() async {
     await _previousCaptureCompleter?.future;
 
     // Create a Completer to track the current capture
@@ -126,15 +124,25 @@ class _CameraScreenState extends State<CameraScreen> {
       //print('Picture saved to gallery: $result');
       setState(() {});
       uploadImage();
+
+      if (message != "safe driving") {
+        print("################################ audioPlayer =  ${audioPlayer} ##################################");
+        if(audioPlayer != null)
+          {
+            audioPlayer?.stop();
+          }
+        audioPlayer = await player.play("${alert}.mp3");
+        print("################################ ${alert}.mp3 ##################################");
+      }
       completer.complete();
     } catch (e) {
       print('Error taking picture: $e');
     }
   }
 
-  void _startTimer() async {
+  void _startTimer(String alert) async {
     _photoTimer = Timer.periodic(Duration(seconds: _timer), (timer) {
-      _takePicture();
+      _takePicture(alert);
     });
   }
 
@@ -150,7 +158,7 @@ class _CameraScreenState extends State<CameraScreen> {
       return Container();
     }
     final userEmail = Provider.of<StringData>(context);
-
+    final alertSound = Provider.of<StringData>(context);
     return Scaffold(
       backgroundColor: Colors.black,
       // appBar: AppBar(
@@ -206,7 +214,9 @@ class _CameraScreenState extends State<CameraScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             TextButton(
-                                onPressed: _startTimer,
+                                onPressed: () {
+                                  _startTimer(alertSound.alert);
+                                },
                                 child: Text('Start',
                                     style: TextStyle(
                                       fontSize: 25,
@@ -214,18 +224,19 @@ class _CameraScreenState extends State<CameraScreen> {
                                       color: Colors.white,
                                     ))),
                             TextButton(
-                                onPressed: () async{
+                                onPressed: () async {
                                   _stopTimer();
-                                  List<dynamic> contactsEmail =await getContactEmail(userEmail.email);
-                                  print("############################### contactsEmail = ${contactsEmail} ###################################");
-                                  if (testEmailMessage == "test") {
-                                    for(int i = 0; i<contactsEmail.length;i++)
-                                      {
-                                        sendEmail(
-                                            "test 1 successfully",
-                                            "what is the next step",
-                                            contactsEmail[i]);
-                                      }
+                                  List<dynamic> contactsEmail =
+                                      await getContactEmail(userEmail.email);
+                                 if (testEmailMessage == "test") {
+                                    for (int i = 0;
+                                        i < contactsEmail.length;
+                                        i++) {
+                                      sendEmail(
+                                          "test 1 successfully",
+                                          "what is the next step",
+                                          contactsEmail[i]);
+                                    }
                                   }
                                 },
                                 child: Text('Stop',
