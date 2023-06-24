@@ -5,12 +5,20 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 class StringData extends ChangeNotifier {
-  String _value = '';
+  String _email = '';
+  String _alert = '';
 
-  String get value => _value;
+  String get email => _email;
+  String get alert => _alert;
 
-  void updateValue(String newValue) {
-    _value = newValue;
+  void updateEmail(String newEmail) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _email = newEmail;
+      notifyListeners();
+    });
+  }
+  void updateAlert(String newAlert) {
+    _alert = newAlert;
     notifyListeners();
   }
 }

@@ -11,6 +11,9 @@ import 'package:driver_behaviour_gp/pages/videoPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:driver_behaviour_gp/my_flutter_app_icons.dart';
+import 'package:provider/provider.dart';
+
+import '../main.dart';
 
 class Home extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -19,29 +22,37 @@ class Home extends StatefulWidget {
   @override
   State<Home> createState() => _HomeState();
 }
-
+//
 class _HomeState extends State<Home> {
   FirebaseAuth instance = FirebaseAuth.instance;
+  String? getUser="";
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     instance.authStateChanges().listen((User? user) {
+
       if (user == null) {
         print('no user');
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => Login(cameras: widget.cameras,)));
       } else
         print('there is a user');
+      setState(() {
+        getUser = user!.email;
+      });
     });
   }
-
+@override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    final userEmail = Provider.of<StringData>(context);
+    userEmail.updateEmail(getUser!);
+  }
   @override
   Widget build(BuildContext context) {
-
-
-
     double h = getHeight(context, 0.01);
     return Scaffold(
       drawer: Drawer(

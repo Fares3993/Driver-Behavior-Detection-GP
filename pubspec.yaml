@@ -45,6 +45,7 @@ dependencies:
   provider:
   audioplayers: ^0.20.1
   shared_preferences:
+  flutter_email_sender: ^5.1.0
 #  flutter_sound: ^8.0.3
 
 

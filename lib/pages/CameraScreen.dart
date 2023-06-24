@@ -1,11 +1,15 @@
+import 'package:driver_behaviour_gp/pages/register.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:http/http.dart' as http;
 import 'dart:ui';
+import 'package:provider/provider.dart';
+import '../main.dart';
 
 class CameraScreen extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -14,6 +18,42 @@ class CameraScreen extends StatefulWidget {
 
   @override
   State<CameraScreen> createState() => _CameraScreenState();
+}
+
+Future<List<dynamic>> getContactEmail(String userEmail) async {
+  final contactsEmail = <dynamic>[];
+  final userService = UserService1();
+
+  // Get the user based on email
+  final user = await userService.getUserByEmail(userEmail);
+
+  if (user != null) {
+    contactsEmail.add(user.contactEmail);
+    if(user.contactEmail1 != null)
+      {
+        contactsEmail.add(user.contactEmail1);
+      }
+    if(user.contactEmail2 != null)
+    {
+      contactsEmail.add(user.contactEmail2);
+    }
+    if(user.contactEmail3 != null)
+    {
+      contactsEmail.add(user.contactEmail3);
+    }
+  }
+  return contactsEmail;
+}
+
+
+sendEmail(String subject, String body, String recipient) async {
+  final Email email = Email(
+    body: body,
+    subject: subject,
+    recipients: [recipient],
+    isHTML: false,
+  );
+  await FlutterEmailSender.send(email);
 }
 
 class _CameraScreenState extends State<CameraScreen> {
@@ -26,7 +66,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
   uploadImage() async {
     final request = http.MultipartRequest(
-        "POST", Uri.parse("https://af73-102-188-107-183.eu.ngrok.io/upload"));
+        "POST", Uri.parse("https://4d60-102-188-107-183.eu.ngrok.io/upload"));
     final headers = {"Content-type": "multipart/form-data"};
     request.files.add(http.MultipartFile('image',
         selectedImage!.readAsBytes().asStream(), selectedImage!.lengthSync(),
@@ -36,6 +76,10 @@ class _CameraScreenState extends State<CameraScreen> {
     http.Response res = await http.Response.fromStream(response);
     final resjason = jsonDecode(res.body);
     message = resjason['message'];
+    if(message != "safe driving")
+      {
+
+      }
     print(
         "################################################################## $message");
     setState(() {});
@@ -98,11 +142,15 @@ class _CameraScreenState extends State<CameraScreen> {
     _photoTimer?.cancel();
   }
 
+  String testEmailMessage = "test";
+
   @override
   Widget build(BuildContext context) {
     if (!_controller!.value.isInitialized) {
       return Container();
     }
+    final userEmail = Provider.of<StringData>(context);
+
     return Scaffold(
       backgroundColor: Colors.black,
       // appBar: AppBar(
@@ -165,9 +213,21 @@ class _CameraScreenState extends State<CameraScreen> {
                                       //fontWeight: FontWeight.bold,
                                       color: Colors.white,
                                     ))),
-
                             TextButton(
-                                onPressed: _stopTimer,
+                                onPressed: () async{
+                                  _stopTimer();
+                                  List<dynamic> contactsEmail =await getContactEmail(userEmail.email);
+                                  print("############################### contactsEmail = ${contactsEmail} ###################################");
+                                  if (testEmailMessage == "test") {
+                                    for(int i = 0; i<contactsEmail.length;i++)
+                                      {
+                                        sendEmail(
+                                            "test 1 successfully",
+                                            "what is the next step",
+                                            contactsEmail[i]);
+                                      }
+                                  }
+                                },
                                 child: Text('Stop',
                                     style: TextStyle(
                                       fontSize: 25,
@@ -199,7 +259,8 @@ class _CameraScreenState extends State<CameraScreen> {
                           ),
                         ),
                       ),
-                    ),)
+                    ),
+                  )
                 ],
               ),
             ),

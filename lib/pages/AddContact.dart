@@ -76,6 +76,7 @@ class _AddContactState extends State<AddContact> {
   @override
   Widget build(BuildContext context) {
     final stringData = Provider.of<StringData>(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -208,17 +209,16 @@ class _AddContactState extends State<AddContact> {
                         onPressed: () {
                           if(contactEmailController1.text !="")
                             {
-                              getUserAndAddContacts(stringData.value, contactEmailController1.text,1);
-
+                              getUserAndAddContacts(stringData.email, contactEmailController1.text,1);
                             }
                           if(contactEmailController2.text !="")
                           {
-                            getUserAndAddContacts(stringData.value, contactEmailController2.text,2);
+                            getUserAndAddContacts(stringData.email, contactEmailController2.text,2);
 
                           }
                           if(contactEmailController3.text !="")
                           {
-                            getUserAndAddContacts(stringData.value, contactEmailController3.text,3);
+                            getUserAndAddContacts(stringData.email, contactEmailController3.text,3);
 
                           }
                           Navigator.pop(context);

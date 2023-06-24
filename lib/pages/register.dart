@@ -40,6 +40,9 @@ class UserData1 {
       userEmail: data1['userEmail'],
       contactEmail: data1['contactEmail'],
       userPhone: data1['userPhone'],
+      contactEmail1: data1['contactEmail1'],
+      contactEmail2: data1['contactEmail2'],
+      contactEmail3: data1['contactEmail3'],
     );
   }
 }

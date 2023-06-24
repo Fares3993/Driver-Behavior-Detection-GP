@@ -151,7 +151,7 @@ class _LoginState extends State<Login> {
                               style: TextStyle(fontSize: 20),
                             ),
                             onPressed: () async {
-                              stringData.updateValue(emailController.text!);
+                              stringData.updateEmail(emailController.text!);
                               if (this.emailController.text == null) {
                                 Dialogue(context, 'please enter your email');
                               } else if (this.passwordController.text == null) {

@@ -31,6 +31,7 @@ class _AlertSoundsState extends State<AlertSounds> {
 
   @override
   Widget build(BuildContext context) {
+
     getData();
     return Scaffold(
       body: Padding(
