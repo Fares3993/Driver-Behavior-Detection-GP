@@ -1,4 +1,8 @@
+
+
+
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 double getHeight(BuildContext context, double fraction) {
   return MediaQuery.of(context).size.height * fraction;
@@ -33,4 +37,34 @@ Widget ContactField()
         hintStyle: TextStyle(color: Colors.grey, fontSize: 16)),
     style: TextStyle(color: Colors.white, fontSize: 18),
   );
+}
+
+Widget BuildEmail(TextEditingController emailController) {
+  return Container(
+        width: 300,
+        alignment: Alignment.centerLeft,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
+            ]),
+        height: 50,
+        child: TextField(
+          keyboardType: TextInputType.emailAddress,
+          controller: emailController,
+          style: TextStyle(color: Colors.black, fontSize: 16),
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.only(top: 14),
+            prefixIcon: Icon(
+              Icons.email,
+              color: Color(0xff5ac18e),
+            ),
+            hintText: 'Enter Your Email',
+            hintStyle: TextStyle(color: Colors.black45),
+          ),
+        ),
+      );
 }

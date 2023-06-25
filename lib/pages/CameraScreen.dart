@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:http/http.dart' as http;

@@ -35,10 +35,9 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  firebase_core:
+#  firebase_core:
   cloud_firestore:
   firebase_auth:
-
   image_picker: ^0.8.6+1
   video_player: ^2.5.1
   camera:
@@ -46,6 +45,7 @@ dependencies:
   audioplayers: ^0.20.1
   shared_preferences:
   flutter_email_sender: ^5.1.0
+  hexcolor: ^2.0.7
 #  flutter_sound: ^8.0.3
 
 
@@ -96,9 +96,24 @@ flutter:
     - family: font2
       fonts:
           - asset: lib/Fonts/font2.ttf
-    - family: MyFlutterApp
+    - family: font3
       fonts:
-          - asset: lib/Fonts/MyFlutterApp.ttf
+          - asset: lib/Fonts/font3.ttf
+    - family: font4
+      fonts:
+            - asset: lib/Fonts/font4.ttf
+    - family: font5
+      fonts:
+            - asset: lib/Fonts/font5.ttf
+    - family: font6
+      fonts:
+            - asset: lib/Fonts/font6.ttf
+    - family: font7
+      fonts:
+            - asset: lib/Fonts/font7.ttf
+    - family: font8
+      fonts:
+            - asset: lib/Fonts/font8.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
