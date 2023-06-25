@@ -59,12 +59,13 @@ class _CameraScreenState extends State<CameraScreen> {
   Timer? _photoTimer;
   Completer<void>? _previousCaptureCompleter;
   File? selectedImage;
-  String? message = "";
+  String? message = "" , model1Message = "", model2Message = "", model3Message = "";
+  List<String> messageSplit = [];
 
   uploadImage() async {
 
     final request = http.MultipartRequest(
-        "POST", Uri.parse("https://4720-102-188-107-183.eu.ngrok.io/upload"));
+        "POST", Uri.parse("https://8c40-102-188-107-183.eu.ngrok.io/upload"));
     final headers = {"Content-type": "multipart/form-data"};
     request.files.add(http.MultipartFile('image',
         selectedImage!.readAsBytes().asStream(), selectedImage!.lengthSync(),
@@ -74,8 +75,6 @@ class _CameraScreenState extends State<CameraScreen> {
     http.Response res = await http.Response.fromStream(response);
     final resjason = jsonDecode(res.body);
     message = resjason['message'];
-
-
     setState(() {
 
     });
@@ -125,7 +124,15 @@ class _CameraScreenState extends State<CameraScreen> {
       setState(() {});
       uploadImage();
 
-      if (message != "safe driving") {
+      if(message!="")
+        {
+          messageSplit = message!.split("/");
+          model1Message = messageSplit[0];
+          model2Message = messageSplit[1];
+        }
+      print("###########################message[0] = ${model1Message}################");
+      print("###########################message[1] = ${model2Message}################");
+      if (model1Message != "safe driving") {
         if(audioPlayer != null)
           {
             audioPlayer?.stop();
@@ -150,6 +157,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
   void _stopTimer() {
     _photoTimer?.cancel();
+    audioPlayer?.stop();
   }
   String testEmailMessage = "test";
   @override
@@ -226,6 +234,7 @@ class _CameraScreenState extends State<CameraScreen> {
                             TextButton(
                                 onPressed: () async {
                                   _stopTimer();
+
                                   List<dynamic> contactsEmail =
                                       await getContactEmail(userEmail.email);
                                  if (testEmailMessage == "test") {
@@ -262,7 +271,29 @@ class _CameraScreenState extends State<CameraScreen> {
                       color: Colors.white.withOpacity(0.4),
                       child: Center(
                         child: Text(
-                          message!,
+                          model1Message!,
+                          style: TextStyle(
+                            fontSize: 25,
+                            //fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  buildBlur(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      width: 300,
+                      height: 60,
+                      padding: EdgeInsets.all(5),
+                      color: Colors.white.withOpacity(0.4),
+                      child: Center(
+                        child: Text(
+                          model2Message!,
                           style: TextStyle(
                             fontSize: 25,
                             //fontWeight: FontWeight.bold,
