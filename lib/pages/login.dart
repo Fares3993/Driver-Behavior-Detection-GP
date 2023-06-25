@@ -36,7 +36,7 @@ class _LoginState extends State<Login> {
             BoxShadow(
                 color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
           ]),
-      height: 60,
+      height: 50,
       child: TextField(
         obscureText: this._seen,
         controller: passwordController,
@@ -176,7 +176,7 @@ class _LoginState extends State<Login> {
                         // ),
                         BuildEmail(emailController),
                         SizedBox(
-                          height: 10,
+                          height: 15,
                         ),
                         BuildPassword(passwordController),
                         SizedBox(
