@@ -110,7 +110,7 @@ class _LoginState extends State<Login> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(30)),
                 child: Padding(
-                  padding: const EdgeInsets.all(40.0),
+                  padding: const EdgeInsets.only(top: 40,left: 20,right: 20),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -174,7 +174,7 @@ class _LoginState extends State<Login> {
                         //   decoration:
                         //       InputDecoration(hintText: 'Enter your email'),
                         // ),
-                        BuildEmail(emailController),
+                        BuildTextField(emailController,"Enter Your Email",Icons.email,TextInputType.emailAddress),
                         SizedBox(
                           height: 15,
                         ),
@@ -190,9 +190,9 @@ class _LoginState extends State<Login> {
                           ),
                           onPressed: () async {
                             stringData.updateEmail(emailController.text!);
-                            if (this.emailController.text == null) {
+                            if (this.emailController.text == "") {
                               Dialogue(context, 'please enter your email');
-                            } else if (this.passwordController.text == null) {
+                            } else if (passwordController.text == "") {
                               Dialogue(context, 'please enter your password');
                             } else {
                               try {

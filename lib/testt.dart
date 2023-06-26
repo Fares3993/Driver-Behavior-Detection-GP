@@ -96,8 +96,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController? passwordController, confirmPasswordController;
   bool _seen = true;
   bool _color = true;
   FirebaseAuth instance = FirebaseAuth.instance;
@@ -117,7 +116,7 @@ class _RegisterState extends State<Register> {
     userService.addUser1(user);
   }
 
-  Widget BuildPassword(TextEditingController passwordController,String hintTxt,bool iconBool) {
+  Widget BuildPassword(TextEditingController passwordController, bool icon) {
     return Container(
       width: 300,
       alignment: Alignment.centerLeft,
@@ -147,10 +146,11 @@ class _RegisterState extends State<Register> {
                   this._color = !this._color;
                 });
               },
-              child:iconBool ? Icon(this._seen ? Icons.visibility_off : Icons.visibility,
+              child: icon
+                  ? Icon(this._seen ? Icons.visibility_off : Icons.visibility,
                   color: this._color ? Colors.grey : Color(0xff5ac18e))
-                  : Text("")),
-          hintText: hintTxt,
+                  : null),
+          hintText: 'Enter your password',
           hintStyle: TextStyle(color: Colors.black45),
         ),
       ),
@@ -255,6 +255,7 @@ class _RegisterState extends State<Register> {
                                   ]),
                             ),
                             SizedBox(height: 50),
+
                             Container(
                               height: 180,
                               child: SingleChildScrollView(
@@ -285,15 +286,46 @@ class _RegisterState extends State<Register> {
                                         userPhoneController,
                                         "Phone Number",
                                         Icons.phone,
-                                        TextInputType.phone),
+                                        TextInputType.number),
                                     SizedBox(
                                       height: 10,
                                     ),
-                                    BuildPassword(passwordController,"Pasword",true),
+                                    TextField(
+                                      obscureText: this._seen,
+                                      controller: passwordController,
+                                      decoration: InputDecoration(
+                                          suffixIcon: GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                this._seen = !this._seen;
+                                              });
+                                            },
+                                            child: Icon(
+                                              this._seen
+                                                  ? Icons.visibility_off
+                                                  : Icons.visibility,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          hintText: 'password'),
+                                      // onChanged: (value) {
+                                      //   setState(() {
+                                      //     this._password = value;
+                                      //   });
+                                      // },
+                                    ),
                                     SizedBox(
                                       height: 10,
                                     ),
-                                    BuildPassword(confirmPasswordController, "Confirm Password", false),
+                                    TextField(
+                                      controller: confirmPasswordController,
+                                      obscureText: this._seen,
+                                      decoration: InputDecoration(
+                                          hintText: 'confirm password'),
+                                      // onChanged: (value) {
+                                      //   this._confirmPassword = value;
+                                      // },
+                                    ),
                                     SizedBox(
                                       height: 50,
                                     ),
@@ -301,6 +333,7 @@ class _RegisterState extends State<Register> {
                                 ),
                               ),
                             ),
+
                             //TextButton(onPressed: addUser1, child: Text("Confirm??",style: TextStyle( fontSize: 20, color: Colors.black),)),
                             SizedBox(
                               height: 30,
@@ -312,29 +345,28 @@ class _RegisterState extends State<Register> {
                                 style: TextStyle(fontSize: 20),
                               ),
                               onPressed: () async {
-                                print("nameController = ${nameController.text}");
-                                if (nameController.text == "") {
+
+                                if (this.nameController.text == null) {
                                   Dialogue(context, 'please enter your name');
-                                } else if (userEmailController.text == "") {
+                                } else if (this.userEmailController.text == null) {
                                   Dialogue(context, 'please enter your email');
-                                } else if (contactEmailController.text ==
-                                    "") {
+                                } else if (this.contactEmailController.text ==
+                                    null) {
                                   Dialogue(
                                       context, 'please enter your contact email');
-                                } else if (userPhoneController.text == "") {
+                                } else if (this.userPhoneController.text == null) {
                                   Dialogue(
                                       context, 'please enter your phone number');
-                                } else if (passwordController!.text == "") {
+                                } else if (passwordController!.text == null) {
                                   Dialogue(context, 'please enter your password');
-                                } else if (confirmPasswordController!.text == "") {
+                                } else if (confirmPasswordController!.text == null) {
                                   Dialogue(context, 'please confirm your password');
                                 } else if (passwordController!.text !=
                                     confirmPasswordController!.text) {
                                   Dialogue(context, 'Passwords Don\'t match');
                                 } else {
-                                  addUser1();
                                   try {
-
+                                    addUser1();
                                     UserCredential credential = await instance
                                         .createUserWithEmailAndPassword(
                                         email: userEmailController.text!,
