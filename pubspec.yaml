@@ -44,8 +44,10 @@ dependencies:
   provider:
   audioplayers: ^0.20.1
   shared_preferences:
-  flutter_email_sender: ^5.1.0
+  flutter_email_sender: ^5.2.0
   hexcolor: ^2.0.7
+  geolocator: ^8.2.1
+  
 #  flutter_sound: ^8.0.3
 
 
@@ -111,9 +113,9 @@ flutter:
     - family: font7
       fonts:
             - asset: lib/Fonts/font7.ttf
-    - family: font8
+    - family: MyFlutterApp
       fonts:
-            - asset: lib/Fonts/font8.ttf
+            - asset: lib/Fonts/MyFlutterApp.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

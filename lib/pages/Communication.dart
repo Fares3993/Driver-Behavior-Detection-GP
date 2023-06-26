@@ -23,17 +23,17 @@ class _contact_usState extends State<contact_us> {
               child: Column(
                 children: [
                   Container(
-                    height: getHeight(context, 0.4),
-                    // width: getWidth(context, 0.6),
+                    height: getHeight(context, 0.3),
+                    width: getWidth(context, 0.5),
                     child: Image(
                       image: AssetImage('lib/Images/Contact.png'),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 50, right: 50),
+                    padding: const EdgeInsets.only(left: 30, right: 30),
                     child: Text(
                       'You can contact with our team through this contacts if you face any problem and we will try to solve the problem and communicate with you immediately.',
-                      style: TextStyle(fontSize: 17),
+                      style: TextStyle(fontSize: 16),
                       textAlign: TextAlign.center,
                     ),
                   )

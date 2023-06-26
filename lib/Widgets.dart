@@ -1,6 +1,3 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -23,7 +20,9 @@ ButtonStyle getButtonStyle(double w , double h,Color c) {
 Widget div(double h)=> Divider(
   color: Colors.black,
   height: h,
-  thickness: 0.6,
+  thickness: 1,
+  endIndent: 50,
+
 );
 Widget ContactField()
 {

@@ -59,35 +59,35 @@ class _HomeState extends State<Home> {
         child: ListView(
           children: [
             ListTile(
-              leading: Icon(Icons.add_alert_sharp,color: Colors.black,),
-              title: Text('Alert Sounds'),
+              leading: Icon(Icons.add_alert_sharp,color: Color(0xff5ac18e),size:30 ,),
+              title: Text('Alert Sounds',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "font5"),),
               onTap: () =>Navigator.push(context, MaterialPageRoute(builder: (context)=>AlertSounds())),
             ),
             div(h),
             ListTile(
-              leading: Icon(Icons.add_ic_call,color: Colors.black,),
-              title: Text('Add more contact'),
+              leading: Icon(Icons.add_ic_call,color:Color(0xff5ac18e),size:30,),
+              title: Text('Add more contact',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "font5"),),
               onTap: () =>Navigator.push(context, MaterialPageRoute(builder: (context)=>AddContact())),
             ),
             div(h),
             ListTile(
-              leading: Icon(Icons.help_outline,color: Colors.black,),
-              title: Text('Help'),
+              leading: Icon(Icons.help_outline,color: Color(0xff5ac18e),size:30,),
+              title: Text('Help',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "font5"),),
               onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>HelpScreen())),
             ),
             div(h),
             ListTile(
-              leading: Icon(Icons.logout,color: Colors.black,),
-              title: Text('Logout'),
+              leading: Icon(Icons.logout,color: Color(0xff5ac18e),size:30,),
+              title: Text('Logout',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "font5"),),
               onTap: ()=> instance.signOut(),
             ),
             div(h),
-            SizedBox(height: getHeight(context, 0.55),),
-            Text('Communicate'),
+            SizedBox(height: getHeight(context, 0.50),),
+            Text('  Communicate',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "font5"),),
             div(h/2),
             ListTile(
-              leading: Icon(MyFlutterApp.telegram_plane,color: Colors.black,),
-              title: Text('Contact us'),
+              leading: Icon(MyFlutterApp.telegram_plane,color: Color(0xff5ac18e),size:30,),
+              title: Text('Contact us',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "font5"),),
               onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (context)=>contact_us()) ),
             ),
           ],
@@ -95,56 +95,86 @@ class _HomeState extends State<Home> {
       ),
       appBar: AppBar(
         backgroundColor: Colors.black,
-      ),
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('lib/Images/home.jpg'), fit: BoxFit.cover),
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: getHeight(context, 0.38),
-              ),
-              Text(
-                'Start Your Safety Trip',
-                style: TextStyle(
-                    fontSize: 25,
-                    fontFamily: 'font2',
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: getHeight(context, 0.2),),
-
-              ElevatedButton(
-                style: getButtonStyle(250, 50,Colors.black),
-                child: Text(
-                  'Open Camera',
-                  style: TextStyle(fontSize: 25,fontFamily: 'font2'),
-                ),
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>CameraScreen(cameras: widget.cameras)));
-                },
-              ),
-              SizedBox(height: getHeight(context, 0.03),),
-
-              ElevatedButton(
-                style: getButtonStyle(250, 50,Colors.black),
-                child: Text(
-                  'Recorded Video',
-                  style: TextStyle(fontSize: 25,fontFamily: 'font2'),
-                ),
-                onPressed: () {
-                  //Navigator.push(context, MaterialPageRoute(builder: (context)=> EmailScreen()));
-                  //Navigator.pushNamed(context, '/videoPage',arguments: "Recorded Video");
-                },
-              ),
-            ],
+        actions: [
+          IconButton(
+            icon: Image.asset('lib/Images/bg.png'), // Replace with your image path
+            onPressed: () {
+              // Add your desired functionality here
+            },
           ),
-        ),
+        ],
+      ),
+      body: Stack(
+        children: [
+          Container(
+            height: double.infinity,
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('lib/Images/home.jpg'), fit: BoxFit.cover),
+            ),
+
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: getHeight(context, 0.25),
+                  ),
+                  Container(
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 250,
+                          width: 250,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage('lib/Images/bgLogo.png'), fit: BoxFit.cover),
+                          ),
+
+                        ),
+                        Text(
+                          'Start Your Safety Trip',
+                          style: TextStyle(
+                              fontSize: 22,
+                              fontFamily: 'font2',
+                              color: Colors.white,
+                              fontWeight: FontWeight.w900),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: getHeight(context, 0.1),),
+
+                  ElevatedButton(
+                    style: getButtonStyle(250, 50,Color(0xff5ac18e)),
+                    child: Text(
+                      'Get Started',
+                      style: TextStyle(fontSize: 25,fontFamily: 'font2'),
+                    ),
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>CameraScreen(cameras: widget.cameras)));
+                    },
+                  ),
+                  SizedBox(height: getHeight(context, 0.03),),
+
+                  // ElevatedButton(
+                  //   style: getButtonStyle(250, 50,Colors.black),
+                  //   child: Text(
+                  //     'Recorded Video',
+                  //     style: TextStyle(fontSize: 25,fontFamily: 'font2'),
+                  //   ),
+                  //   onPressed: () {
+                  //     //Navigator.push(context, MaterialPageRoute(builder: (context)=> EmailScreen()));
+                  //     //Navigator.pushNamed(context, '/videoPage',arguments: "Recorded Video");
+                  //   },
+                  // ),
+                ],
+              ),
+            ),
+          ),
+
+        ],
+
       ),
     );
   }

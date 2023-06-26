@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'dart:ui';
 import 'package:provider/provider.dart';
@@ -56,13 +57,16 @@ class _CameraScreenState extends State<CameraScreen> {
   CameraController? _controller;
   int _timer = 3;
   Timer? _photoTimer;
+
   Completer<void>? _previousCaptureCompleter;
   File? selectedImage;
-  String? message = "" , model1Message = "", model2Message = "", model3Message = "";
+  String? message = "",
+      model1Message = "",
+      model2Message = "",
+      model3Message = "";
   List<String> messageSplit = [];
 
   uploadImage() async {
-
     final request = http.MultipartRequest(
         "POST", Uri.parse("https://a5c0-102-188-107-183.eu.ngrok.io/upload"));
     final headers = {"Content-type": "multipart/form-data"};
@@ -74,9 +78,7 @@ class _CameraScreenState extends State<CameraScreen> {
     http.Response res = await http.Response.fromStream(response);
     final resjason = jsonDecode(res.body);
     message = resjason['message'];
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
@@ -101,10 +103,11 @@ class _CameraScreenState extends State<CameraScreen> {
     _photoTimer?.cancel();
     super.dispose();
   }
-  final player = AudioCache();
-  AudioPlayer ?audioPlayer = null;
-  Future<void> _takePicture(String alert) async {
 
+  final player = AudioCache();
+  AudioPlayer? audioPlayer = null;
+
+  Future<void> _takePicture(String alert) async {
     await _previousCaptureCompleter?.future;
 
     // Create a Completer to track the current capture
@@ -123,23 +126,22 @@ class _CameraScreenState extends State<CameraScreen> {
       setState(() {});
       uploadImage();
 
-      if(message!="")
-        {
-          messageSplit = message!.split("/");
-          model1Message = messageSplit[0];
-          model2Message = messageSplit[1];
-        }
-      print("###########################message[0] = ${model1Message}################");
-      print("###########################message[1] = ${model2Message}################");
+      if (message != "") {
+        messageSplit = message!.split("/");
+        model1Message = messageSplit[0];
+        model2Message = messageSplit[1];
+      }
+      print(
+          "###########################message[0] = ${model1Message}################");
+      print(
+          "###########################message[1] = ${model2Message}################");
       if (model1Message != "safe driving") {
-        if(audioPlayer != null)
-          {
-            audioPlayer?.stop();
-          }
-        if(alert=="")
-          {
-            alert = "Sound 1";
-          }
+        if (audioPlayer != null) {
+          audioPlayer?.stop();
+        }
+        if (alert == "") {
+          alert = "Sound 1";
+        }
         audioPlayer = await player.play("${alert}.mp3");
       }
       completer.complete();
@@ -158,7 +160,9 @@ class _CameraScreenState extends State<CameraScreen> {
     _photoTimer?.cancel();
     audioPlayer?.stop();
   }
+
   String testEmailMessage = "test";
+
   @override
   Widget build(BuildContext context) {
     if (!_controller!.value.isInitialized) {
@@ -232,17 +236,35 @@ class _CameraScreenState extends State<CameraScreen> {
                                     ))),
                             TextButton(
                                 onPressed: () async {
+                                  String location = "";
                                   _stopTimer();
+                                  try {
+                                    final bool hasPermission = await Geolocator.isLocationServiceEnabled();
+                                    if (!hasPermission) {
+                                      throw 'Location service is disabled';
+                                    }
 
+                                    final Position position = await Geolocator.getCurrentPosition(
+                                      desiredAccuracy: LocationAccuracy.high,
+                                    );
+                                    final String latitude = position.latitude.toString();
+                                    final String longitude = position.longitude.toString();
+
+                                    final String googleMapsLink =
+                                        'https://www.google.com/maps?q=$latitude,$longitude';
+                                    location = '$googleMapsLink';
+                                  } catch (error) {
+                                    throw 'Failed to send Location: $error';
+                                  }
                                   List<dynamic> contactsEmail =
                                       await getContactEmail(userEmail.email);
-                                 if (testEmailMessage == "test") {
+                                  if (testEmailMessage == "test") {
                                     for (int i = 0;
                                         i < contactsEmail.length;
                                         i++) {
                                       sendEmail(
-                                          "test 1 successfully",
-                                          "what is the next step",
+                                          "Safe Driving",
+                                          'Your friend is feeling drowsy while driving, please help him and his location is:\n\n'+ location,
                                           contactsEmail[i]);
                                     }
                                   }
