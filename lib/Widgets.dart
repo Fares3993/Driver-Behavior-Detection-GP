@@ -17,13 +17,25 @@ ButtonStyle getButtonStyle(double w , double h,Color c) {
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(50))));
 }
-Widget div(double h)=> Divider(
+Widget div(double h,double i)=> Divider(
   color: Colors.black,
   height: h,
   thickness: 1,
-  endIndent: 50,
+  endIndent: i,
 
 );
+
+Widget appBarLogo()
+{
+  return Container(
+    height: 50,
+    width: 50,
+    decoration: const BoxDecoration(
+      image: DecorationImage(
+          image: AssetImage('lib/Images/Logo.png')),
+    ),
+  );
+}
 Widget ContactField()
 {
   return TextField(

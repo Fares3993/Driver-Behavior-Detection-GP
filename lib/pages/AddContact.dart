@@ -80,6 +80,10 @@ class _AddContactState extends State<AddContact> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
+        actions: [
+          appBarLogo()
+
+        ],
       ),
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
@@ -204,7 +208,7 @@ class _AddContactState extends State<AddContact> {
                           style: TextStyle(
                               fontSize: 25,
                               fontFamily: 'font2',
-                              color: Colors.black),
+                              color: Color(0xff5ac18e)),
                         ),
                         onPressed: () {
                           if(contactEmailController1.text !="")

@@ -12,61 +12,81 @@ class _HelpScreenState extends State<HelpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text("help"),
-      // ),
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        actions: [
+          appBarLogo()
+
+        ],
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(50),
+        padding: const EdgeInsets.all(10),
         child: Center(
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: 75,),
-                Container(
-                  height: 150,
-                  width: 200,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage('lib/Images/bg.png')
+            Container(
+              height: 170,
+              width: 170,
+              decoration: BoxDecoration(
+                color: Color(0xff5ac181),
+                shape: BoxShape.circle,),
+              child: Center(
+                child: Column(
+                  children: [
+                    Image(
+                      image: AssetImage('lib/Images/alertIcon.png'),
+                      height: 100,
+                      width: 130,
                     ),
-                    borderRadius: BorderRadius.circular(75)
-                  ),
-                  child: Center(
-                    child: Column(
-                      children: [
-                        Image(image: AssetImage('lib/Images/alertIcon.png'),height: 100,width: 130,),
-                        Text("Alert Sounds",style: TextStyle(fontSize: 20),)
-                      ],
-                    ),
+                    Text(
+                      "Alert Sounds",
+                      style: TextStyle(fontSize: 20),
+                    )
+                  ],
+                ),
+              ),
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              Text(
+                'it allows the User to choose the sound alarm that invokes when the user tends to fail asleep,being drunk or seat belt not worn situation',
+                style: TextStyle(fontSize: 17),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              div(50,0),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                height: 170,
+                width: 170,
+                decoration: BoxDecoration(
+                  color: Color(0xff5ac181),
+                  shape: BoxShape.circle,),
+                child: Center(
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        "lib/Images/SafetyIcon.png", width: 60, height: 100,),
+                      Text(
+                        "Increase safety",
+                        style: TextStyle(fontSize: 16),
+                      )
+                    ],
                   ),
                 ),
-                SizedBox(height: 50,),
-                Text('it allows the User to choose the sound alarm that invokes when the user tends to fail asleep,being drunk or seat belt not worn situation',style: TextStyle(fontSize: 17),),
-                SizedBox(height: 20,),
-                div(50),
-                SizedBox(height: 20,),
-                Container(
-                  height: 150,
-                  width: 200,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage('lib/Images/bg.png')
-                      ),
-                      borderRadius: BorderRadius.circular(75)
-                  ),
-                  child: Center(
-                    child: Column(
-                      children: [
-                        Icon(Icons.safety_check_outlined,size: 100,),
-                        Text("Increase the safety",style: TextStyle(fontSize: 20),)
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 50,),
-                Text('it allows the User to increase his safety by adding more phone numbers to the closest people so when he is driving indanger the application sends message to those people with the drivers location to help him.',style: TextStyle(fontSize: 17),),
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              Text(
+                'it allows the User to increase his safety by adding more phone numbers to the closest people so when he is driving indanger the application sends message to those people with the drivers location to help him.',
+                style: TextStyle(fontSize: 17),
+              ),
               ],
             ),
           ),

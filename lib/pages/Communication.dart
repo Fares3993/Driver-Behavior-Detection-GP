@@ -15,6 +15,10 @@ class _contact_usState extends State<contact_us> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
+        actions: [
+          appBarLogo()
+
+        ],
       ),
       body: Column(
         children: [
@@ -54,7 +58,7 @@ class _contact_usState extends State<contact_us> {
                     'Contact with us',
                     style: TextStyle(fontSize: 20, color: Colors.grey),
                   ),
-                  div(h),
+                  div(h,0),
                   SizedBox(height: getHeight(context, 0.03),),
                   ContactField('lib/Images/gmail.png', '    faresahmed3993@gmail.com', context, 30),
                   SizedBox(height: getHeight(context, 0.02),),

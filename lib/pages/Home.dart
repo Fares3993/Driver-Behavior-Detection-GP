@@ -17,26 +17,31 @@ import '../main.dart';
 
 class Home extends StatefulWidget {
   final List<CameraDescription> cameras;
-  const Home({super.key,required this.cameras});
+
+  const Home({super.key, required this.cameras});
 
   @override
   State<Home> createState() => _HomeState();
 }
+
 //
 class _HomeState extends State<Home> {
   FirebaseAuth instance = FirebaseAuth.instance;
-  String? getUser="";
+  String? getUser = "";
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     instance.authStateChanges().listen((User? user) {
-
       if (user == null) {
         print('no user');
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Login(cameras: widget.cameras,)));
+            context,
+            MaterialPageRoute(
+                builder: (context) => Login(
+                      cameras: widget.cameras,
+                    )));
       } else
         print('there is a user');
       setState(() {
@@ -44,13 +49,15 @@ class _HomeState extends State<Home> {
       });
     });
   }
-@override
+
+  @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     final userEmail = Provider.of<StringData>(context);
     userEmail.updateEmail(getUser!);
   }
+
   @override
   Widget build(BuildContext context) {
     double h = getHeight(context, 0.01);
@@ -59,36 +66,98 @@ class _HomeState extends State<Home> {
         child: ListView(
           children: [
             ListTile(
-              leading: Icon(Icons.add_alert_sharp,color: Color(0xff5ac18e),size:30 ,),
-              title: Text('Alert Sounds',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "font5"),),
-              onTap: () =>Navigator.push(context, MaterialPageRoute(builder: (context)=>AlertSounds())),
+              leading: Icon(
+                Icons.add_alert_sharp,
+                color: Color(0xff5ac18e),
+                size: 30,
+              ),
+              title: Text(
+                'Alert Sounds',
+                style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "font5"),
+              ),
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AlertSounds())),
             ),
-            div(h),
+            div(h,50),
             ListTile(
-              leading: Icon(Icons.add_ic_call,color:Color(0xff5ac18e),size:30,),
-              title: Text('Add more contact',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "font5"),),
-              onTap: () =>Navigator.push(context, MaterialPageRoute(builder: (context)=>AddContact())),
+              leading: Icon(
+                Icons.add_ic_call,
+                color: Color(0xff5ac18e),
+                size: 30,
+              ),
+              title: Text(
+                'Add more contact',
+                style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "font5"),
+              ),
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AddContact())),
             ),
-            div(h),
+            div(h,50),
             ListTile(
-              leading: Icon(Icons.help_outline,color: Color(0xff5ac18e),size:30,),
-              title: Text('Help',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "font5"),),
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>HelpScreen())),
+              leading: Icon(
+                Icons.help_outline,
+                color: Color(0xff5ac18e),
+                size: 30,
+              ),
+              title: Text(
+                'Help',
+                style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "font5"),
+              ),
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => HelpScreen())),
             ),
-            div(h),
+            div(h,50),
             ListTile(
-              leading: Icon(Icons.logout,color: Color(0xff5ac18e),size:30,),
-              title: Text('Logout',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "font5"),),
-              onTap: ()=> instance.signOut(),
+              leading: Icon(
+                Icons.logout,
+                color: Color(0xff5ac18e),
+                size: 30,
+              ),
+              title: Text(
+                'Logout',
+                style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "font5"),
+              ),
+              onTap: () => instance.signOut(),
             ),
-            div(h),
-            SizedBox(height: getHeight(context, 0.50),),
-            Text('  Communicate',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "font5"),),
-            div(h/2),
+            div(h,50),
+            SizedBox(
+              height: getHeight(context, 0.50),
+            ),
+            Text(
+              '  Communicate',
+              style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "font5"),
+            ),
+            div(h / 2,50),
             ListTile(
-              leading: Icon(MyFlutterApp.telegram_plane,color: Color(0xff5ac18e),size:30,),
-              title: Text('Contact us',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "font5"),),
-              onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (context)=>contact_us()) ),
+              leading: Icon(
+                MyFlutterApp.telegram_plane,
+                color: Color(0xff5ac18e),
+                size: 30,
+              ),
+              title: Text(
+                'Contact us',
+                style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "font5"),
+              ),
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => contact_us())),
             ),
           ],
         ),
@@ -96,12 +165,8 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         actions: [
-          IconButton(
-            icon: Image.asset('lib/Images/bg.png'), // Replace with your image path
-            onPressed: () {
-              // Add your desired functionality here
-            },
-          ),
+          appBarLogo()
+
         ],
       ),
       body: Stack(
@@ -113,7 +178,6 @@ class _HomeState extends State<Home> {
               image: DecorationImage(
                   image: AssetImage('lib/Images/home.jpg'), fit: BoxFit.cover),
             ),
-
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -128,9 +192,9 @@ class _HomeState extends State<Home> {
                           width: 250,
                           decoration: const BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage('lib/Images/bgLogo.png'), fit: BoxFit.cover),
+                                image: AssetImage('lib/Images/bgLogo.png'),
+                                fit: BoxFit.cover),
                           ),
-
                         ),
                         Text(
                           'Start Your Safety Trip',
@@ -143,19 +207,27 @@ class _HomeState extends State<Home> {
                       ],
                     ),
                   ),
-                  SizedBox(height: getHeight(context, 0.1),),
+                  SizedBox(
+                    height: getHeight(context, 0.1),
+                  ),
 
                   ElevatedButton(
-                    style: getButtonStyle(250, 50,Color(0xff5ac18e)),
+                    style: getButtonStyle(250, 50, Color(0xff5ac18e)),
                     child: Text(
                       'Get Started',
-                      style: TextStyle(fontSize: 25,fontFamily: 'font2'),
+                      style: TextStyle(fontSize: 25, fontFamily: 'font2'),
                     ),
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>CameraScreen(cameras: widget.cameras)));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  CameraScreen(cameras: widget.cameras)));
                     },
                   ),
-                  SizedBox(height: getHeight(context, 0.03),),
+                  SizedBox(
+                    height: getHeight(context, 0.03),
+                  ),
 
                   // ElevatedButton(
                   //   style: getButtonStyle(250, 50,Colors.black),
@@ -172,12 +244,8 @@ class _HomeState extends State<Home> {
               ),
             ),
           ),
-
         ],
-
       ),
     );
   }
 }
-
-
