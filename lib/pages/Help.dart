@@ -51,7 +51,7 @@ class _HelpScreenState extends State<HelpScreen> {
                 height: 50,
               ),
               Text(
-                'it allows the User to choose the sound alarm that invokes when the user tends to fail asleep,being drunk or seat belt not worn situation',
+                'it allows the User to choose the sound alarm that invokes when the user tends to fail asleep, being distruct or seat belt not worn situation',
                 style: TextStyle(fontSize: 17),
               ),
               SizedBox(
@@ -84,7 +84,7 @@ class _HelpScreenState extends State<HelpScreen> {
                 height: 50,
               ),
               Text(
-                'it allows the User to increase his safety by adding more phone numbers to the closest people so when he is driving indanger the application sends message to those people with the drivers location to help him.',
+                'it allows the User to increase his safety by adding more Emails to the closest people so when he is driving indanger the application sends Email to those people with the drivers location to help him.',
                 style: TextStyle(fontSize: 17),
               ),
               ],

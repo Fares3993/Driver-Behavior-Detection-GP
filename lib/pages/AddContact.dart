@@ -88,10 +88,11 @@ class _AddContactState extends State<AddContact> {
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               height: getHeight(context, 0.15),
+              width: getWidth(context, 0.90),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10), color: Colors.white),
               child: Row(
@@ -107,12 +108,12 @@ class _AddContactState extends State<AddContact> {
                           style: TextStyle(color: Colors.black),
                           children: <TextSpan>[
                             TextSpan(
-                                text: 'Icrease the safety feature',
+                                text: 'Increase the safety feature ',
                                 style: TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold)),
                             TextSpan(
                                 text:
-                                    'is to add more phone numbers to the most closest people to you to be more safe',
+                                    'is to add more Emails to the most closest people to you to be more safe',
                                 style: TextStyle(
                                   fontSize: 18,
                                 ))
@@ -123,116 +124,83 @@ class _AddContactState extends State<AddContact> {
               ),
             ),
             SizedBox(
-              height: getHeight(context, 0.05),
+              height: getHeight(context, 0.03),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 50.0, right: 50),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Contact 1',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    ),
-                    SizedBox(
-                      height: getHeight(context, 0.02),
-                    ),
-                    TextField(
-                      controller: contactEmailController1,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white)),
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey)),
-                          hintText: 'Enter Phone Number',
-                          hintStyle:
-                              TextStyle(color: Colors.grey, fontSize: 16)),
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                    SizedBox(
-                      height: getHeight(context, 0.05),
-                    ),
-                    Text(
-                      'Contact 2',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    ),
-                    SizedBox(
-                      height: getHeight(context, 0.02),
-                    ),
-                    TextField(
-                      controller: contactEmailController2,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white)),
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey)),
-                          hintText: 'Enter Phone Number',
-                          hintStyle:
-                          TextStyle(color: Colors.grey, fontSize: 16)),
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                    SizedBox(
-                      height: getHeight(context, 0.05),
-                    ),
-                    Text(
-                      'Contact 3',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    ),
-                    SizedBox(
-                      height: getHeight(context, 0.02),
-                    ),
-                    TextField(
-                      controller: contactEmailController3,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white)),
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey)),
-                          hintText: 'Enter Phone Number',
-                          hintStyle:
-                          TextStyle(color: Colors.grey, fontSize: 16)),
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                    SizedBox(
-                      height: getHeight(context, 0.08),
-                    ),
-                    Center(
-                      child: ElevatedButton(
-                        style: getButtonStyle(200, 50, Colors.white),
-                        child: Text(
-                          'Done',
-                          style: TextStyle(
-                              fontSize: 25,
-                              fontFamily: 'font2',
-                              color: Color(0xff5ac18e)),
-                        ),
-                        onPressed: () {
-                          if(contactEmailController1.text !="")
-                            {
-                              getUserAndAddContacts(stringData.email, contactEmailController1.text,1);
-                            }
-                          if(contactEmailController2.text !="")
-                          {
-                            getUserAndAddContacts(stringData.email, contactEmailController2.text,2);
+            CircleAvatar(
+              radius: 70,
+              backgroundColor: Colors.black26,
+              //HexColor("090150"),//Color(0x00021A),
+              backgroundImage: AssetImage("lib/Images/Logo.png"),
+            ),
+            SizedBox(
+              height: getHeight(context, 0.03),
+            ),
+      Padding(
+        padding: const EdgeInsets.only(left: 10,right: 10),
+        child: Container(
 
-                          }
-                          if(contactEmailController3.text !="")
-                          {
-                            getUserAndAddContacts(stringData.email, contactEmailController3.text,3);
-
-                          }
-                          Navigator.pop(context);
-                        },
+          height: getHeight(context, 0.48),
+          width: getWidth(context, 0.9),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(30)),
+             child:Padding(
+                padding: const EdgeInsets.only(left: 20.0, right: 20),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: getHeight(context, 0.05),
                       ),
-                    ),
-                  ],
+                      BuildTextField(contactEmailController1, "Enter Contact email 1", Icons.email, TextInputType.emailAddress),
+                      SizedBox(
+                        height: getHeight(context, 0.02),
+                      ),
+                      BuildTextField(contactEmailController2, "Enter Contact email 2", Icons.email, TextInputType.emailAddress),
+                      SizedBox(
+                        height: getHeight(context, 0.02),
+                      ),
+                      BuildTextField(contactEmailController3, "Enter Contact email 3", Icons.email, TextInputType.emailAddress),
+
+                      SizedBox(
+                        height: getHeight(context, 0.08),
+                      ),
+                      Center(
+                        child: ElevatedButton(
+                          style: getButtonStyle(200, 50, Colors.black),
+                          child: Text(
+                            'Done',
+                            style: TextStyle(
+                                fontSize: 25,
+                                fontFamily: 'font2',
+                                color: Colors.white),
+                          ),
+                          onPressed: () {
+                            if(contactEmailController1.text !="")
+                              {
+                                getUserAndAddContacts(stringData.email, contactEmailController1.text,1);
+                              }
+                            if(contactEmailController2.text !="")
+                            {
+                              getUserAndAddContacts(stringData.email, contactEmailController2.text,2);
+
+                            }
+                            if(contactEmailController3.text !="")
+                            {
+                              getUserAndAddContacts(stringData.email, contactEmailController3.text,3);
+
+                            }
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
+        ),
+      )
           ],
         ),
       ),

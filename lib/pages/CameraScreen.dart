@@ -14,9 +14,7 @@ import '../main.dart';
 
 class CameraScreen extends StatefulWidget {
   final List<CameraDescription> cameras;
-
   const CameraScreen({Key? key, required this.cameras}) : super(key: key);
-
   @override
   State<CameraScreen> createState() => _CameraScreenState();
 }
@@ -43,12 +41,13 @@ Future<List<dynamic>> getContactEmail(String userEmail) async {
   return contactsEmail;
 }
 
-sendEmail(String subject, String body, String recipient) async {
+sendEmail(String subject, String body, String recipient,File selectedImage) async {
   final Email email = Email(
     body: body,
     subject: subject,
     recipients: [recipient],
     isHTML: false,
+    attachmentPaths: [selectedImage.path]
   );
   await FlutterEmailSender.send(email);
 }
@@ -64,11 +63,12 @@ class _CameraScreenState extends State<CameraScreen> {
       model1Message = "",
       model2Message = "",
       model3Message = "";
+  int count = 0;
   List<String> messageSplit = [];
 
   uploadImage() async {
     final request = http.MultipartRequest(
-        "POST", Uri.parse("https://a5c0-102-188-107-183.eu.ngrok.io/upload"));
+        "POST", Uri.parse("https://c797-102-188-107-183.eu.ngrok.io/upload"));
     final headers = {"Content-type": "multipart/form-data"};
     request.files.add(http.MultipartFile('image',
         selectedImage!.readAsBytes().asStream(), selectedImage!.lengthSync(),
@@ -107,7 +107,7 @@ class _CameraScreenState extends State<CameraScreen> {
   final player = AudioCache();
   AudioPlayer? audioPlayer = null;
 
-  Future<void> _takePicture(String alert) async {
+  Future<void> _takePicture(String alert,StringData userEmail) async {
     await _previousCaptureCompleter?.future;
 
     // Create a Completer to track the current capture
@@ -130,12 +130,20 @@ class _CameraScreenState extends State<CameraScreen> {
         messageSplit = message!.split("/");
         model1Message = messageSplit[0];
         model2Message = messageSplit[1];
+        model3Message = messageSplit[2];
       }
-      print(
-          "###########################message[0] = ${model1Message}################");
-      print(
-          "###########################message[1] = ${model2Message}################");
-      if (model1Message != "safe driving") {
+      print("##################################### model3Message = $model3Message #####################################");
+      if (model1Message != "safe driving" && model2Message != "Seat belt" && (model3Message != "Not Drosy" || model3Message != "Open eye")) {
+        if(model3Message != "Not Drosy" || model3Message != "Open eye")
+          {
+            count++;
+            print("##################################### count = $count #####################################");
+
+          }
+        else
+          {
+            count=0;
+          }
         if (audioPlayer != null) {
           audioPlayer?.stop();
         }
@@ -143,6 +151,42 @@ class _CameraScreenState extends State<CameraScreen> {
           alert = "Sound 1";
         }
         audioPlayer = await player.play("${alert}.mp3");
+        //################################################################3
+        String location = "";
+        print("######################## count in email code = $count  #############################");
+        if (count == 3) {
+          print("######################## open email code #############################");
+          try {
+            final bool hasPermission = await Geolocator.isLocationServiceEnabled();
+            if (!hasPermission) {
+              throw 'Location service is disabled';
+            }
+
+            final Position position = await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high,
+            );
+            final String latitude = position.latitude.toString();
+            final String longitude = position.longitude.toString();
+
+            final String googleMapsLink =
+                'https://www.google.com/maps?q=$latitude,$longitude';
+            location = '$googleMapsLink';
+          } catch (error) {
+            throw 'Failed to send Location: $error';
+          }
+          List<dynamic> contactsEmail =
+          await getContactEmail(userEmail.email);
+          for (int i = 0;
+          i < contactsEmail.length;
+          i++) {
+            sendEmail(
+                "Safe Driving",
+                'Your friend is feeling drowsy while driving, please help him and his location is:\n\n'+ location,
+                contactsEmail[i],selectedImage!);
+          }
+          print("timer stopped at count = $count");
+          _stopTimer();
+        }
       }
       completer.complete();
     } catch (e) {
@@ -150,18 +194,17 @@ class _CameraScreenState extends State<CameraScreen> {
     }
   }
 
-  void _startTimer(String alert) async {
+  void _startTimer(String alert ,StringData userEmail) async {
     _photoTimer = Timer.periodic(Duration(seconds: _timer), (timer) {
-      _takePicture(alert);
+      _takePicture(alert, userEmail);
     });
   }
 
   void _stopTimer() {
     _photoTimer?.cancel();
-    audioPlayer?.stop();
   }
 
-  String testEmailMessage = "test";
+  //String testEmailMessage = "test";
 
   @override
   Widget build(BuildContext context) {
@@ -226,7 +269,7 @@ class _CameraScreenState extends State<CameraScreen> {
                           children: [
                             TextButton(
                                 onPressed: () {
-                                  _startTimer(alertSound.alert);
+                                  _startTimer(alertSound.alert,userEmail);
                                 },
                                 child: Text('Start',
                                     style: TextStyle(
@@ -235,39 +278,8 @@ class _CameraScreenState extends State<CameraScreen> {
                                       color: Colors.white,
                                     ))),
                             TextButton(
-                                onPressed: () async {
-                                  String location = "";
+                                onPressed: (){
                                   _stopTimer();
-                                  try {
-                                    final bool hasPermission = await Geolocator.isLocationServiceEnabled();
-                                    if (!hasPermission) {
-                                      throw 'Location service is disabled';
-                                    }
-
-                                    final Position position = await Geolocator.getCurrentPosition(
-                                      desiredAccuracy: LocationAccuracy.high,
-                                    );
-                                    final String latitude = position.latitude.toString();
-                                    final String longitude = position.longitude.toString();
-
-                                    final String googleMapsLink =
-                                        'https://www.google.com/maps?q=$latitude,$longitude';
-                                    location = '$googleMapsLink';
-                                  } catch (error) {
-                                    throw 'Failed to send Location: $error';
-                                  }
-                                  List<dynamic> contactsEmail =
-                                      await getContactEmail(userEmail.email);
-                                  if (testEmailMessage == "test") {
-                                    for (int i = 0;
-                                        i < contactsEmail.length;
-                                        i++) {
-                                      sendEmail(
-                                          "Safe Driving",
-                                          'Your friend is feeling drowsy while driving, please help him and his location is:\n\n'+ location,
-                                          contactsEmail[i]);
-                                    }
-                                  }
                                 },
                                 child: Text('Stop',
                                     style: TextStyle(
@@ -347,233 +359,4 @@ Widget buildBlur({
         child: child,
       ),
     );
-// // import 'dart:async';
-// // import 'dart:convert';
-// // import 'dart:io';
-// // import 'package:flutter/material.dart';
-// // import 'package:camera/camera.dart';
-// // import 'package:http/http.dart' as http;
-// // import 'package:provider/provider.dart';
-// //
-// // import '../main.dart';
-// //
-// //
-// // class CameraScreen extends StatefulWidget {
-// //   const CameraScreen({Key? key}) : super(key: key);
-// //
-// //   @override
-// //   State<CameraScreen> createState() => _CameraScreenState();
-// // }
-// //
-// // class _CameraScreenState extends State<CameraScreen> {
-// //   CameraController? _controller;
-// //   int _timer = 2;
-// //   Timer ?_photoTimer;
-// //   Completer<void> ?_previousCaptureCompleter;
-// //   File? selectedImage;
-// //   String? message = "";
-// //
-// //   uploadImage() async{
-// //     final request = http.MultipartRequest(
-// //         "POST", Uri.parse("https://8b74-102-188-141-35.eu.ngrok.io/upload"));
-// //     final headers = {"Content-type": "multipart/form-data"};
-// //     request.files.add(http.MultipartFile('image',
-// //         selectedImage!.readAsBytes().asStream(), selectedImage!.lengthSync(),
-// //         filename: selectedImage!.path.split("/").last));
-// //     request.headers.addAll(headers);
-// //     final response = await request.send();
-// //     http.Response res = await http.Response.fromStream(response);
-// //     final resjason = jsonDecode(res.body);
-// //     message = resjason['message'];
-// //     setState(() {});
-// //   }
-// //   @override
-// //   void initState() {
-// //     super.initState();
-// //     _controller = CameraController(cameras![0], ResolutionPreset.medium);
-// //     _controller!.initialize().then((_) {
-// //       if (!mounted) {
-// //         return;
-// //       }
-// //       setState(() {});
-// //     });
-// //   }
-// //   @override
-// //   void dispose() {
-// //     _controller!.dispose();
-// //     _photoTimer?.cancel();
-// //     super.dispose();
-// //   }
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     List<CameraDescription>? cameras = Provider.of<CamerasProvider>(context).cameras;
-// //     return Placeholder();
-// //
-// //   }
-// // }
-// import 'dart:async';
-// import 'dart:convert';
-// import 'dart:io';
-// import 'package:flutter/material.dart';
-// import 'package:path_provider/path_provider.dart';
-// import 'package:camera/camera.dart';
-// import 'package:image_gallery_saver/image_gallery_saver.dart';
-// import 'package:http/http.dart' as http;
-// List<CameraDescription> ?cameras;
-//
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   cameras = await availableCameras();
-//   runApp(MyApp());
-// }
-//
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Camera Demo',
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//       ),
-//       home: MyHomePage(),
-//     );
-//   }
-// }
-//
-// class MyHomePage extends StatefulWidget {
-//   @override
-//   _MyHomePageState createState() => _MyHomePageState();
-// }
-//
-// class _MyHomePageState extends State<MyHomePage> {
-//   CameraController? _controller;
-//   int _timer = 2;
-//   Timer ?_photoTimer;
-//   Completer<void> ?_previousCaptureCompleter;
-//   File? selectedImage;
-//   String? message = "";
-//
-//   uploadImage() async{
-//     final request = http.MultipartRequest(
-//         "POST", Uri.parse("https://e364-102-188-141-35.eu.ngrok.io/upload"));
-//     final headers = {"Content-type": "multipart/form-data"};
-//     request.files.add(http.MultipartFile('image',
-//         selectedImage!.readAsBytes().asStream(), selectedImage!.lengthSync(),
-//         filename: selectedImage!.path.split("/").last));
-//     request.headers.addAll(headers);
-//     final response = await request.send();
-//     http.Response res = await http.Response.fromStream(response);
-//     final resjason = jsonDecode(res.body);
-//     message = resjason['message'];
-//     setState(() {});
-//   }
-//   @override
-//   void initState() {
-//     super.initState();
-//     _controller = CameraController(cameras![0], ResolutionPreset.medium);
-//     _controller!.initialize().then((_) {
-//       if (!mounted) {
-//         return;
-//       }
-//       setState(() {});
-//     });
-//   }
-//
-//   @override
-//   void dispose() {
-//     _controller!.dispose();
-//     _photoTimer?.cancel();
-//     super.dispose();
-//   }
-//
-//   Future<void> _takePicture() async {
-//     await _previousCaptureCompleter?.future;
-//
-//     // Create a Completer to track the current capture
-//     final Completer<void> completer = Completer();
-//     _previousCaptureCompleter = completer;
-//     try {
-//       // Ensure that the camera is initialized.
-//       await _controller!.initialize();
-//
-//       // Take the picture.
-//       final XFile file = await _controller!.takePicture();
-//       selectedImage = File(file.path);
-//       // Save the picture to the device's gallery.
-//       //final result = await ImageGallerySaver.saveFile(file.path);
-//       //print('Picture saved to gallery: $result');
-//       setState(() {
-//
-//       });
-//       uploadImage();
-//       completer.complete();
-//
-//     } catch (e) {
-//       print('Error taking picture: $e');
-//     }
-//   }
-//   void _startTimer() async{
-//     _photoTimer = Timer.periodic(Duration(seconds: _timer), (timer) {
-//       _takePicture();
-//     });
-//   }
-//
-//   void _stopTimer() {
-//     _photoTimer?.cancel();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     if (!_controller!.value.isInitialized) {
-//       return Container();
-//     }
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Camera Demo'),
-//       ),
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: <Widget>[
-//             SizedBox(
-//               height: 200,
-//               width: 300,
-//               child: CameraPreview(_controller!),
-//             ),
-//             SizedBox(height: 20),
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//               children: [
-//                 ElevatedButton(
-//                   onPressed: _startTimer,
-//                   child: Text('Start'),
-//                 ),
-//                 ElevatedButton(
-//                   onPressed: _stopTimer,
-//                   child: Text('Stop'),
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-//
-//
-// // Future<void> takePicture(CameraController cameraController, String filePath) async {
-// //   try {
-// //     // Ensure that the camera is initialized.
-// //     await cameraController.initialize();
-// //
-// //     // Take the picture.
-// //     final XFile file = await cameraController.takePicture();
-// //
-// //     // Save the picture to the specified file path.
-// //     final File pictureFile = File(file.path);
-// //     await pictureFile.copy(filePath);
-// //   } catch (e) {
-// //     print('Error taking picture: $e');
-// //   }
-// // }
+
