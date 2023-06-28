@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:driver_behaviour_gp/pages/Home.dart';
+import 'package:driver_behaviour_gp/pages/Introduction%20Pages/SplashScreen.dart';
 import 'package:driver_behaviour_gp/pages/videoPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/videoPage':(context)=>VideoPage()
       },
-      home: Home(cameras: cameras!,),
+      home: SplashScreen(cameras: cameras!,),
     );
   }
 }
