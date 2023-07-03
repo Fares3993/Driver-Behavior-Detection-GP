@@ -76,7 +76,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
   uploadImage() async {
     final request = http.MultipartRequest(
-        "POST", Uri.parse("https://c52c-41-68-83-61.eu.ngrok.io/upload"));
+        "POST", Uri.parse("https://3b51-41-68-83-61.eu.ngrok.io/upload"));
     final headers = {"Content-type": "multipart/form-data"};
     request.files.add(http.MultipartFile('image',
         selectedImage!.readAsBytes().asStream(), selectedImage!.lengthSync(),
@@ -140,6 +140,7 @@ class _CameraScreenState extends State<CameraScreen> {
         model2Message = messageSplit[1];
         model3Message = messageSplit[2];
       }
+      print("############################befor if model3Message = $model3Message ############################");
 
       if(model1Message != "safe driving")
       {
@@ -157,13 +158,14 @@ class _CameraScreenState extends State<CameraScreen> {
       {
         suffImage2 = 'lib/Images/true.png';
       }
-      if(model3Message != "Not Drowsy" || model3Message != "Open eye")
-      {
-        suffImage3 = 'lib/Images/false.png';
-      }
-      else if(model3Message == "Not Drowsy" || model3Message == "Open eye")
+
+      if(model3Message == "Not Drowsy" || model3Message == "Open eye")
       {
         suffImage3 = 'lib/Images/true.png';
+      }
+      else
+      {
+        suffImage3 = 'lib/Images/false.png';
       }
       print(
           "##################################### model3Message = $model3Message #####################################");
@@ -279,11 +281,11 @@ class _CameraScreenState extends State<CameraScreen> {
                       SizedBox(
                         height: 20,
                       ),
-                      resultBox("lib/Images/distractedIcon.png", suffImage2!, model2Message!),
+                      resultBox("lib/Images/seatbeltIcon.png", suffImage2!, model2Message!),
                       SizedBox(
                         height: 20,
                       ),
-                      resultBox("lib/Images/distractedIcon.png", suffImage3!, model3Message!),
+                      resultBox("lib/Images/drowsyIcon.png", suffImage3!, model3Message!),
 
                     ],
                   ),
@@ -395,7 +397,6 @@ Widget resultBox(String prefImage,String suffImage,String result)
               ),
             ),
           ),
-
           Image.asset(suffImage,height: 50,),
         ],
       ),

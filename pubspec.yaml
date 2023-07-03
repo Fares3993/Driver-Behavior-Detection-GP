@@ -48,7 +48,7 @@ dependencies:
   hexcolor: ^2.0.7
   geolocator: ^8.2.1
   dots_indicator:
-#  flutter_sound: ^8.0.3
+
 
 
 dev_dependencies:
