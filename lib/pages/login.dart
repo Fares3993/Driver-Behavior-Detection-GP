@@ -196,6 +196,7 @@ class _LoginState extends State<Login> {
                               Dialogue(context, 'please enter your password');
                             } else {
                               try {
+
                                 UserCredential credential =
                                     await instance.signInWithEmailAndPassword(
                                         email: emailController.text!,

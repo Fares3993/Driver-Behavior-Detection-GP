@@ -10,11 +10,14 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'dart:ui';
 import 'package:provider/provider.dart';
+import '../Widgets.dart';
 import '../main.dart';
 
 class CameraScreen extends StatefulWidget {
   final List<CameraDescription> cameras;
+
   const CameraScreen({Key? key, required this.cameras}) : super(key: key);
+
   @override
   State<CameraScreen> createState() => _CameraScreenState();
 }
@@ -41,14 +44,14 @@ Future<List<dynamic>> getContactEmail(String userEmail) async {
   return contactsEmail;
 }
 
-sendEmail(String subject, String body, String recipient,File selectedImage) async {
+sendEmail(
+    String subject, String body, String recipient, File selectedImage) async {
   final Email email = Email(
-    body: body,
-    subject: subject,
-    recipients: [recipient],
-    isHTML: false,
-    attachmentPaths: [selectedImage.path]
-  );
+      body: body,
+      subject: subject,
+      recipients: [recipient],
+      isHTML: false,
+      attachmentPaths: [selectedImage.path]);
   await FlutterEmailSender.send(email);
 }
 
@@ -62,13 +65,18 @@ class _CameraScreenState extends State<CameraScreen> {
   String? message = "",
       model1Message = "",
       model2Message = "",
-      model3Message = "";
+      model3Message = "",
+      suffImage1 = "lib/Images/trueOrfalse.png",
+      suffImage2 = "lib/Images/trueOrfalse.png",
+      suffImage3 = "lib/Images/trueOrfalse.png";
+
   int count = 0;
+  bool isPlaying = false;
   List<String> messageSplit = [];
 
   uploadImage() async {
     final request = http.MultipartRequest(
-        "POST", Uri.parse("https://07dc-154-189-49-55.eu.ngrok.io/upload"));
+        "POST", Uri.parse("https://c52c-41-68-83-61.eu.ngrok.io/upload"));
     final headers = {"Content-type": "multipart/form-data"};
     request.files.add(http.MultipartFile('image',
         selectedImage!.readAsBytes().asStream(), selectedImage!.lengthSync(),
@@ -107,7 +115,7 @@ class _CameraScreenState extends State<CameraScreen> {
   final player = AudioCache();
   AudioPlayer? audioPlayer = null;
 
-  Future<void> _takePicture(String alert,StringData userEmail) async {
+  Future<void> _takePicture(String alert, StringData userEmail) async {
     await _previousCaptureCompleter?.future;
 
     // Create a Completer to track the current capture
@@ -132,18 +140,43 @@ class _CameraScreenState extends State<CameraScreen> {
         model2Message = messageSplit[1];
         model3Message = messageSplit[2];
       }
-      print("##################################### model3Message = $model3Message #####################################");
-      if (model1Message != "safe driving" && model2Message != "Seat belt" && (model3Message != "Not Drosy" || model3Message != "Open eye")) {
-        if(model3Message != "Not Drosy" || model3Message != "Open eye")
-          {
-            count++;
-            print("##################################### count = $count #####################################");
 
-          }
-        else
-          {
-            count=0;
-          }
+      if(model1Message != "safe driving")
+      {
+        suffImage1 = 'lib/Images/false.png';
+      }
+      else if(model1Message == "safe driving")
+      {
+        suffImage1 = 'lib/Images/true.png';
+      }
+      if(model2Message != "Seat belt")
+      {
+        suffImage2 = 'lib/Images/false.png';
+      }
+      else if(model2Message == "Seat belt")
+      {
+        suffImage2 = 'lib/Images/true.png';
+      }
+      if(model3Message != "Not Drowsy" || model3Message != "Open eye")
+      {
+        suffImage3 = 'lib/Images/false.png';
+      }
+      else if(model3Message == "Not Drowsy" || model3Message == "Open eye")
+      {
+        suffImage3 = 'lib/Images/true.png';
+      }
+      print(
+          "##################################### model3Message = $model3Message #####################################");
+      if (model1Message != "safe driving" &&
+          model2Message != "Seat belt" &&
+          (model3Message != "Not Drowsy" || model3Message != "Open eye")) {
+        if (model3Message != "Not Drowsy" || model3Message != "Open eye") {
+          count++;
+          print(
+              "##################################### count = $count #####################################");
+        } else {
+          count = 0;
+        }
         if (audioPlayer != null) {
           audioPlayer?.stop();
         }
@@ -153,11 +186,14 @@ class _CameraScreenState extends State<CameraScreen> {
         audioPlayer = await player.play("${alert}.mp3");
         //################################################################3
         String location = "";
-        print("######################## count in email code = $count  #############################");
+        print(
+            "######################## count in email code = $count  #############################");
         if (count == 3) {
-          print("######################## open email code #############################");
+          print(
+              "######################## open email code #############################");
           try {
-            final bool hasPermission = await Geolocator.isLocationServiceEnabled();
+            final bool hasPermission =
+                await Geolocator.isLocationServiceEnabled();
             if (!hasPermission) {
               throw 'Location service is disabled';
             }
@@ -174,15 +210,14 @@ class _CameraScreenState extends State<CameraScreen> {
           } catch (error) {
             throw 'Failed to send Location: $error';
           }
-          List<dynamic> contactsEmail =
-          await getContactEmail(userEmail.email);
-          for (int i = 0;
-          i < contactsEmail.length;
-          i++) {
+          List<dynamic> contactsEmail = await getContactEmail(userEmail.email);
+          for (int i = 0; i < contactsEmail.length; i++) {
             sendEmail(
                 "Safe Driving",
-                'Your friend is feeling drowsy while driving, please help him and his location is:\n\n'+ location,
-                contactsEmail[i],selectedImage!);
+                'Your friend is feeling drowsy while driving, please help him and his location is:\n\n' +
+                    location,
+                contactsEmail[i],
+                selectedImage!);
           }
           print("timer stopped at count = $count");
           _stopTimer();
@@ -194,7 +229,7 @@ class _CameraScreenState extends State<CameraScreen> {
     }
   }
 
-  void _startTimer(String alert ,StringData userEmail) async {
+  void _startTimer(String alert, StringData userEmail) async {
     _photoTimer = Timer.periodic(Duration(seconds: _timer), (timer) {
       _takePicture(alert, userEmail);
     });
@@ -214,149 +249,156 @@ class _CameraScreenState extends State<CameraScreen> {
     final userEmail = Provider.of<StringData>(context);
     final alertSound = Provider.of<StringData>(context);
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        actions: [appBarLogo()],
+      ),
       backgroundColor: Colors.black,
-      // appBar: AppBar(
-      //   title: Text('Camera Demo'),
-      // ),
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('lib/Images/home.jpg'), fit: BoxFit.cover),
-        ),
-        child: Stack(
+      body: SingleChildScrollView(
+        child: Column(
           children: [
-            Positioned.fill(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(
-                  sigmaX: 1,
-                  sigmaY: 1,
+            Stack(
+              children: [
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(height: 15),
+                      Container(
+                        height: 250,
+                        width: 350,
+                        child: ClipRRect(
+                          child: CameraPreview(_controller!),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      resultBox("lib/Images/distractedIcon.png", suffImage1!, model1Message!),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      resultBox("lib/Images/distractedIcon.png", suffImage2!, model2Message!),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      resultBox("lib/Images/distractedIcon.png", suffImage3!, model3Message!),
+
+                    ],
+                  ),
                 ),
-                child: Container(color: Colors.black.withOpacity(0.2)),
+                Image.asset(
+                  "lib/Images/Live.png",
+                  width: 150,
+                  height: 25,
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 50,
+            ),
+
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Colors.red,
+                  width: 10,
+                ),
+              ),
+              child: CircleAvatar(
+                radius: 50,
+                backgroundColor: Colors.white,
+                child: IconButton(
+                  key: ValueKey<bool>(isPlaying),
+                  icon: Icon(
+                    isPlaying ? Icons.stop : Icons.play_arrow,
+                    size: 35,
+                    color: Colors.red,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      isPlaying = !isPlaying;
+                      if (isPlaying) {
+                        _startTimer(alertSound.alert, userEmail);
+                      } else if (!isPlaying) {
+                        _stopTimer();
+                      }
+                    });
+                  },
+                ),
               ),
             ),
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: 100),
-                  Container(
-                    height: 250,
-                    width: 350,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.white.withOpacity(0.2),
-                        width: 15.0,
-                      ),
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    child: CameraPreview(_controller!),
-                  ),
-                  SizedBox(
-                    height: 150,
-                  ),
-                  Container(
-                    child: buildBlur(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        width: 300,
-                        height: 60,
-                        padding: EdgeInsets.all(5),
-                        color: Colors.white.withOpacity(0.4),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            TextButton(
-                                onPressed: () {
-                                  _startTimer(alertSound.alert,userEmail);
-                                },
-                                child: Text('Start',
-                                    style: TextStyle(
-                                      fontSize: 25,
-                                      //fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ))),
-                            TextButton(
-                                onPressed: (){
-                                  _stopTimer();
-                                },
-                                child: Text('Stop',
-                                    style: TextStyle(
-                                      fontSize: 25,
-                                      //fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ))),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  buildBlur(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                      width: 300,
-                      height: 60,
-                      padding: EdgeInsets.all(5),
-                      color: Colors.white.withOpacity(0.4),
-                      child: Center(
-                        child: Text(
-                          model1Message!,
-                          style: TextStyle(
-                            fontSize: 25,
-                            //fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  buildBlur(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                      width: 300,
-                      height: 60,
-                      padding: EdgeInsets.all(5),
-                      color: Colors.white.withOpacity(0.4),
-                      child: Center(
-                        child: Text(
-                          model2Message!,
-                          style: TextStyle(
-                            fontSize: 25,
-                            //fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
+
+            // Container(
+            //   width: 100,
+            //   height: 100,
+            //   decoration: BoxDecoration(
+            //     shape: BoxShape.circle,
+            //     border: Border.all(
+            //       color: Colors.red,
+            //       width: 10,
+            //     ),
+            //   ),
+            //   child: CircleAvatar(
+            //     radius: 48, // Adjust the radius to fit your needs
+            //     backgroundColor: Colors.white,
+            //     child: IconButton(
+            //       icon: Icon(
+            //         Icons.favorite,
+            //         size: 30,
+            //         color: Colors.red,
+            //       ),
+            //       onPressed: () {
+            //         // Handle button press
+            //       },
+            //     ),
+            //   ),
+            // )
           ],
         ),
       ),
     );
   }
 }
+Widget resultBox(String prefImage,String suffImage,String result)
+{
+  return Container(
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20)),
+    child: Container(
+      width: 300,
+      height: 60,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black26,
+                blurRadius: 6,
+                offset: Offset(0, 2))
+          ]),
+      child: Row(
+        children: [
+          Image.asset(prefImage,height: 50,),
+          Container(
+            width: 190,
+            child: Text(
+              result,
+              style: TextStyle(
+                fontSize: 25,
+                color: Colors.black,
+              ),
+            ),
+          ),
 
-Widget buildBlur({
-  required Widget child,
-  required BorderRadius borderRadius,
-  double sigmaX = 10,
-  double sigmaY = 10,
-}) =>
-    ClipRRect(
-      borderRadius: borderRadius ?? BorderRadius.zero,
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: sigmaX, sigmaY: sigmaY),
-        child: child,
+          Image.asset(suffImage,height: 50,),
+        ],
       ),
-    );
-
+    ),
+  );
+}

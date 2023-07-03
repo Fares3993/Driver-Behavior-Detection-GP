@@ -36,7 +36,8 @@ class _SplashScreenState extends State<SplashScreen> {
                   'lib/Images/SplashLogo.png',
                   height: 150,
                 ),
-                Text("Drive Safely")
+                SizedBox(height: 20,),
+                Text("Drive Safely",style: TextStyle(fontFamily: "font1",fontSize: 22),)
               ],
             ),
             CircularProgressIndicator(color: Colors.grey,),

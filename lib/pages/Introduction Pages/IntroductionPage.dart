@@ -4,8 +4,10 @@ import 'package:driver_behaviour_gp/Widgets.dart';
 import 'package:driver_behaviour_gp/main.dart';
 import 'package:driver_behaviour_gp/pages/Home.dart';
 import 'package:flutter/material.dart';
+
 class IntroductioPage extends StatefulWidget {
   final List<CameraDescription> cameras;
+
   const IntroductioPage({super.key, required this.cameras});
 
   @override
@@ -13,32 +15,27 @@ class IntroductioPage extends StatefulWidget {
 }
 
 class _IntroductioPageState extends State<IntroductioPage> {
-
   int _currentIndex = 0;
   final PageController _pageController = PageController();
 
   List<String> _imagePaths = [
-    'lib/Images/SplashLogo.png',
-    'lib/Images/SplashLogo.png',
-    'lib/Images/SplashLogo.png',
+    'lib/Images/safeDriving.png',
+    'lib/Images/distracted.PNG',
+    'lib/Images/seatbelt.PNG',
+    'lib/Images/drowsy.jpg',
   ];
 
-  List<String> _imageTexts = [
-    'Text 1',
-    'Text 2',
-    'Text 3',
-  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('My App'),
-      // ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 20.0),
-        child: Column(
-
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        actions: [
+          appBarLogo()
+        ],
+      ),
+      body: Column(
           children: [
             Expanded(
               child: PageView.builder(
@@ -53,15 +50,14 @@ class _IntroductioPageState extends State<IntroductioPage> {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      SizedBox(height: 10,),
                       Container(
-
                         width: getWidth(context, 1),
                         height: 400,
-
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Image.asset(
-                            'lib/Images/test.png',
+                            _imagePaths[index],
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -72,31 +68,32 @@ class _IntroductioPageState extends State<IntroductioPage> {
                         position: _currentIndex,
                         decorator: DotsDecorator(
                           color: Colors.grey,
-                          activeColor: Colors.green,
+                          activeColor: Color(0xff5ac181),
                           size: Size.square(10),
                           activeSize: Size(12, 12),
                         ),
                       ),
-                      SizedBox(height: 20),
-                      Text(
-                        _imageTexts[index],
-                        style: TextStyle(fontSize: 24),
-                      ),
+                      SizedBox(height: 30),
+                      getText(index, context)
                     ],
                   );
                 },
               ),
             ),
-
-            SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextButton(
                   onPressed: () {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Home(cameras: cameras!)));
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Home(cameras: cameras!)));
                   },
-                  child: Text('Skip',style: TextStyle(fontSize: 22,color: Colors.grey),),
+                  child: Text(
+                    'Skip',
+                    style: TextStyle(fontSize: 22, color: Colors.grey),
+                  ),
                 ),
                 SizedBox(width: 100),
                 ElevatedButton(
@@ -110,16 +107,22 @@ class _IntroductioPageState extends State<IntroductioPage> {
                         duration: Duration(milliseconds: 300),
                         curve: Curves.ease,
                       );
-                    }
-                    else if(_currentIndex == _imagePaths.length - 1)
-                    {
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Home(cameras: cameras!)));
+                    } else if (_currentIndex == _imagePaths.length - 1) {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Home(cameras: cameras!)));
                     }
                   },
                   child: Row(
                     children: [
-                      Text('Next',style: TextStyle(fontSize: 20),),
-                      SizedBox(width: 5,),
+                      Text(
+                        'Next',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
                       Icon(Icons.navigate_next),
                     ],
                   ),
@@ -129,8 +132,83 @@ class _IntroductioPageState extends State<IntroductioPage> {
             SizedBox(height: 50),
           ],
         ),
-      ),
+
     );
   }
 }
 
+Widget getText(int index, BuildContext context) {
+  if (index == 0) {
+    return Container(
+      width: getWidth(context, 0.75),
+      child: RichText(
+        text: TextSpan(
+            style: TextStyle(color: Colors.black),
+            children: <TextSpan>[
+              span('The main objective of the project is developing a '),
+              spanBold('driver Behavior detection software '),
+              span('to help drivers '),
+              spanBold('stay safe')
+            ]),
+      ),
+    );
+  }
+  else if (index == 1) {
+    return Container(
+      width: getWidth(context, 0.75),
+      child: RichText(
+        text: TextSpan(
+            style: TextStyle(color: Colors.black),
+            children: <TextSpan>[
+             span("The system detects whether the driver is "),
+              spanBold("Distracted "),
+              span("or not")
+            ]),
+      ),
+    );
+  }
+  else if (index == 2) {
+    return Container(
+      width: getWidth(context, 0.75),
+      child: RichText(
+        text: TextSpan(
+            style: TextStyle(color: Colors.black),
+            children: <TextSpan>[
+              span("The system detects whether the driver is wearing a "),
+              spanBold("\nseat belt "),
+              span("or not")
+            ]),
+      ),
+    );
+  }
+  else if (index == 3) {
+    return Container(
+      width: getWidth(context, 0.75),
+      child: RichText(
+        text: TextSpan(
+            style: TextStyle(color: Colors.black),
+            children: <TextSpan>[
+              span("The system detects whether the driver is "),
+              spanBold("Drowsy "),
+              span("or not")
+            ]),
+      ),
+    );
+  }
+  return Text("data");
+}
+
+TextSpan spanBold(String txt) {
+  return TextSpan(
+    text: txt,
+    style: TextStyle(
+        fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff5ac18e)),
+  );
+}
+
+TextSpan span(String txt) {
+  return TextSpan(
+    text: txt,
+    style: TextStyle(fontSize: 22),
+  );
+}
