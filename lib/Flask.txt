@@ -1,23 +1,10 @@
-import os
-from keras import models
-from keras.applications.imagenet_utils import preprocess_input, decode_predictions
 import numpy as np
-from flask import Flask, request, jsonify
-from flask import Flask, redirect, url_for, request, render_template
-import werkzeug
-# Keras
-from keras.applications.imagenet_utils import preprocess_input, decode_predictions
-from keras.models import load_model
-from keras.preprocessing import image
-from matplotlib import pyplot as plt
 from werkzeug.utils import secure_filename
 import werkzeug
 from flask import Flask, request, jsonify
 import tensorflow as tf
 import cv2
 
-# from tensorflow.keras.models import load_model
-# from tensorflow_addons.optimizers import CyclicalLearningRate
 app = Flask(__name__)
 Results = ""
 MODEL_PATH1 = 'D:/Study/Semester 8/GP/Models/Driver Behaviour_VGG16(98%).h5'
@@ -32,23 +19,6 @@ model2.compile(loss="categorical_crossentropy",
 model3 = tf.keras.models.load_model(MODEL_PATH3, compile=False)
 model3.compile(loss="categorical_crossentropy",
                optimizer="adam", metrics=["accuracy"])
-
-# MODEL_PATH1 = 'D:/Study/Semester 8/GP/Seatbelt1_M(93.5).h5'
-# model1 = tf.keras.models.load_model(MODEL_PATH1, compile=False)
-# model1.compile(loss="categorical_crossentropy",
-#                   optimizer ="adam", metrics=["accuracy"])
-# img2 = cv2.imread("D:/Study/Semester 8/GP/deployment data/photo1682703822.jpeg")
-# final_image2 = cv2.resize(img2, (256, 256))
-# final_image2 = np.expand_dims(final_image2, axis=0)  ##need fourth dimension
-# final_image2 = final_image2 / 255.0
-# max_prop = np.argmax(model.predict(final_image2), axis=1)
-# print(max_prop)
-# my_list = ["safe driving", "texting right", "talking on the phone right", "texting left",
-#            "talking on the phone left",
-#            "operating the radio", "drinking", "reaching behind", "hair & makeup", "talking to passenger"]
-# x = int(max_prop)
-# print(my_list[x])
-
 
 @app.route('/upload', methods=["POST"])
 def upload():
@@ -85,7 +55,7 @@ def upload():
         max_prop3 = np.argmax(model3.predict(final_image2), axis=1)
         print("max_prop3 = " + str(max_prop3))
 
-        my_list3 = ["Closed eye","Drowsy","Not Drosy","Open eye"]
+        my_list3 = ["Closed eye","Drowsy","Not Drowsy","Open eye"]
         x = int(max_prop3)
         print(my_list3[x])
         Results += my_list3[x]
@@ -119,115 +89,8 @@ def upload():
         # eyeDetection = eyeDetection / 255.0
         # max_prop4 = np.argmax(model3.predict(eyeDetection), axis=1)
         # print("max_prop4 = " + str(max_prop4))
-
-
-
         return jsonify({
             "message": Results
         })
-
-
 if __name__ == "__main__":
     app.run(debug=True, port=4000)
-# #################################################################################################################################################################
-# # # import os
-# # # from keras import models
-# # # from keras.applications.imagenet_utils import preprocess_input, decode_predictions
-# # # import numpy as np
-# # # # Keras
-# # # from keras.applications.imagenet_utils import preprocess_input, decode_predictions``
-# # # from keras.models import load_model
-# # # from keras.preprocessing import image
-# # # from werkzeug.utils import secure_filename
-# # # from flask import Flask, request, jsonify
-# # # import werkzeug
-# # #
-# # # app = Flask(__name__)
-# # # # # Model saved with Keras model.save()    yyy
-# # # MODEL_PATH = 'D:/Study/Semester 8/GP/Seatbelt_VGG16(99.5).h5'
-# # # # Load your trained model yyy
-# # # model = load_model(MODEL_PATH)
-# # #
-# # #
-# # # def model_predict(img_path, model):
-# # #     img = image.load_img(img_path, target_size=(224, 224))
-# # #
-# # #     # Preprocessing the image
-# # #     x = image.img_to_array(img)
-# # #     # x = np.true_divide(x, 255)
-# # #     x = np.expand_dims(x, axis=0)
-# # #
-# # #     # Be careful how your trained model deals with the input
-# # #     # otherwise, it won't make correct prediction!
-# # #     x = preprocess_input(x, mode='caffe')
-# # #
-# # #     preds = model.predict(x)
-# # #     return preds
-# # #
-# # # @app.route('/upload', methods=["POST"])
-# # # def upload():
-# # #     if (request.method == "POST"):
-# # #         imagefile = request.files['image']
-# # #         filename = werkzeug.utils.secure_filename(imagefile.filename)
-# # #         imagefile.save("D:/Study/Semester 8/GP/uploadedimages/" + filename)
-# # #         return jsonify({
-# # #             "message": "Image Uploaded Successfully"
-# # #         })
-# # #
-# # #
-# # # if __name__ == "__main__":
-# # #     app.run(debug=True, port=4000)
-# #
-# #
-# # ########################################################################################################################
-# #
-# # # import os
-# # # from keras import models
-# # # from keras.applications.imagenet_utils import preprocess_input, decode_predictions
-# # # import numpy as np
-# # # from flask import Flask, request, jsonify
-# # # from flask import Flask, redirect, url_for, request, render_template
-# # # import werkzeug
-# # # # Keras
-# # # from keras.applications.imagenet_utils import preprocess_input, decode_predictions
-# # # from keras.models import load_model
-# # # from keras.preprocessing import image
-# # from werkzeug.utils import secure_filename
-# # from flask import Flask, request, jsonify
-# # import werkzeug
-# # #
-# # app = Flask(__name__)
-# # # # # Model saved with Keras model.save()    yyy
-# # # MODEL_PATH = 'D:/Study/Semester 8/GP/Seatbelt_VGG16(99.5).h5'
-# # # # Load your trained model yyy
-# # # model = load_model(MODEL_PATH)
-# # # model._make_predict_function()
-# # #
-# # # def model_predict(img_path, model):
-# # #     img = image.load_img(img_path, target_size=(224, 224))
-# # #
-# # #     # Preprocessing the image
-# # #     x = image.img_to_array(img)
-# # #     # x = np.true_divide(x, 255)
-# # #     x = np.expand_dims(x, axis=0)
-# # #
-# # #     # Be careful how your trained model deals with the input
-# # #     # otherwise, it won't make correct prediction!
-# # #     x = preprocess_input(x, mode='caffe')
-# # #
-# # #     preds = model.predict(x)
-# # #     return preds
-# # #
-# # @app.route('/upload', methods=["POST"])
-# # def upload():
-# #     if (request.method == "POST"):
-# #         imagefile = request.files['image']
-# #         filename = werkzeug.utils.secure_filename(imagefile.filename)
-# #         imagefile.save("D:/Study/Semester 8/GP/uploadedimages/" + filename)
-# #         return jsonify({
-# #             "message": filename
-# #         })
-# #
-# #
-# # if __name__ == "__main__":
-# #     app.run(debug=True, port=4000)

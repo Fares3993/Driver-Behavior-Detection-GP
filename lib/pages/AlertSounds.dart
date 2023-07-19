@@ -50,7 +50,7 @@ class _AlertSoundsState extends State<AlertSounds> {
         child: Center(
           child: Column(
             children: [
-              Image.asset("lib/Images/Alert.png"),
+              Image.asset("lib/Images/alert.PNG"),
               SizedBox(height: 30,),
               Text(
                 'Select Sound',

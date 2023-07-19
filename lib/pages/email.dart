@@ -131,36 +131,6 @@ class _EmailScreenState extends State<EmailScreen> {
             },
             child: Text('Get User by Email'),
           ),
-          // FutureBuilder<List<UserData>>(
-          //   future: userService.getUsers(),
-          //   builder: (context, snapshot) {
-          //     if (snapshot.connectionState == ConnectionState.waiting) {
-          //       return CircularProgressIndicator();
-          //     }
-          //     if (snapshot.hasData) {
-          //       final users = snapshot.data!;
-          //       return Column(
-          //         children: users.map((user) {
-          //           return ListTile(
-          //             title: Text('Name: ${user.name}'),
-          //             subtitle: Column(
-          //               crossAxisAlignment: CrossAxisAlignment.start,
-          //               children: [
-          //                 Text('Age: ${user.age}'),
-          //                 Text('Phone: ${user.phone}'),
-          //                 Text('Email: ${user.email}'),
-          //               ],
-          //             ),
-          //           );
-          //         }).toList(),
-          //       );
-          //     }
-          //     if (snapshot.hasError) {
-          //       return Text('Error: ${snapshot.error}');
-          //     }
-          //     return Text('No users found.');
-          //   },
-          // ),
         ],
       ),
     ),

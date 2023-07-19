@@ -8,7 +8,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
-import 'dart:ui';
 import 'package:provider/provider.dart';
 import '../Widgets.dart';
 import '../main.dart';
@@ -76,7 +75,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
   uploadImage() async {
     final request = http.MultipartRequest(
-        "POST", Uri.parse("https://3b51-41-68-83-61.eu.ngrok.io/upload"));
+        "POST", Uri.parse("https://020e-102-186-100-121.eu.ngrok.io/upload"));
     final headers = {"Content-type": "multipart/form-data"};
     request.files.add(http.MultipartFile('image',
         selectedImage!.readAsBytes().asStream(), selectedImage!.lengthSync(),
@@ -109,6 +108,7 @@ class _CameraScreenState extends State<CameraScreen> {
     // TODO: implement dispose
     _controller!.dispose();
     _photoTimer?.cancel();
+    audioPlayer!.stop();
     super.dispose();
   }
 
@@ -128,57 +128,42 @@ class _CameraScreenState extends State<CameraScreen> {
       // Take the picture.
       final XFile file = await _controller!.takePicture();
       selectedImage = File(file.path);
-      // Save the picture to the device's gallery.
-      //final result = await ImageGallerySaver.saveFile(file.path);
-      //print('Picture saved to gallery: $result');
       setState(() {});
       uploadImage();
-
       if (message != "") {
         messageSplit = message!.split("/");
         model1Message = messageSplit[0];
         model2Message = messageSplit[1];
         model3Message = messageSplit[2];
       }
-      print("############################befor if model3Message = $model3Message ############################");
-
-      if(model1Message != "safe driving")
-      {
+      //suffix Icon in result text field
+      if (model1Message != "Not Distracted") {
         suffImage1 = 'lib/Images/false.png';
-      }
-      else if(model1Message == "safe driving")
-      {
+      } else if (model1Message == "Not Distracted") {
         suffImage1 = 'lib/Images/true.png';
       }
-      if(model2Message != "Seat belt")
-      {
+      if (model2Message != "Seat belt") {
         suffImage2 = 'lib/Images/false.png';
-      }
-      else if(model2Message == "Seat belt")
-      {
+      } else if (model2Message == "Seat belt") {
         suffImage2 = 'lib/Images/true.png';
       }
-
-      if(model3Message == "Not Drowsy" || model3Message == "Open eye")
-      {
+      if (model3Message == "Not Drowsy" || model3Message == "Open eye") {
         suffImage3 = 'lib/Images/true.png';
-      }
-      else
-      {
+      } else {
         suffImage3 = 'lib/Images/false.png';
       }
-      print(
-          "##################################### model3Message = $model3Message #####################################");
-      if (model1Message != "safe driving" &&
-          model2Message != "Seat belt" &&
-          (model3Message != "Not Drowsy" || model3Message != "Open eye")) {
-        if (model3Message != "Not Drowsy" || model3Message != "Open eye") {
+      if (model1Message != "Not Distracted" ||
+          model2Message != "Seat belt" ||
+          (model3Message != "Not Drowsy"))
+      {
+        if (model3Message != "Not Drowsy" || model3Message != "Open eye")
+        {
           count++;
-          print(
-              "##################################### count = $count #####################################");
         } else {
           count = 0;
         }
+
+
         if (audioPlayer != null) {
           audioPlayer?.stop();
         }
@@ -186,13 +171,8 @@ class _CameraScreenState extends State<CameraScreen> {
           alert = "Sound 1";
         }
         audioPlayer = await player.play("${alert}.mp3");
-        //################################################################3
         String location = "";
-        print(
-            "######################## count in email code = $count  #############################");
         if (count == 3) {
-          print(
-              "######################## open email code #############################");
           try {
             final bool hasPermission =
                 await Geolocator.isLocationServiceEnabled();
@@ -241,8 +221,6 @@ class _CameraScreenState extends State<CameraScreen> {
     _photoTimer?.cancel();
   }
 
-  //String testEmailMessage = "test";
-
   @override
   Widget build(BuildContext context) {
     if (!_controller!.value.isInitialized) {
@@ -277,16 +255,18 @@ class _CameraScreenState extends State<CameraScreen> {
                       SizedBox(
                         height: 50,
                       ),
-                      resultBox("lib/Images/distractedIcon.png", suffImage1!, model1Message!),
+                      resultBox("lib/Images/distractedIcon.png", suffImage1!,
+                          model1Message!),
                       SizedBox(
                         height: 20,
                       ),
-                      resultBox("lib/Images/seatbeltIcon.png", suffImage2!, model2Message!),
+                      resultBox("lib/Images/seatbeltIcon.png", suffImage2!,
+                          model2Message!),
                       SizedBox(
                         height: 20,
                       ),
-                      resultBox("lib/Images/drowsyIcon.png", suffImage3!, model3Message!),
-
+                      resultBox("lib/Images/drowsyIcon.png", suffImage3!,
+                          model3Message!),
                     ],
                   ),
                 ),
@@ -300,7 +280,6 @@ class _CameraScreenState extends State<CameraScreen> {
             SizedBox(
               height: 50,
             ),
-
             Container(
               width: 80,
               height: 80,
@@ -334,72 +313,9 @@ class _CameraScreenState extends State<CameraScreen> {
                 ),
               ),
             ),
-
-            // Container(
-            //   width: 100,
-            //   height: 100,
-            //   decoration: BoxDecoration(
-            //     shape: BoxShape.circle,
-            //     border: Border.all(
-            //       color: Colors.red,
-            //       width: 10,
-            //     ),
-            //   ),
-            //   child: CircleAvatar(
-            //     radius: 48, // Adjust the radius to fit your needs
-            //     backgroundColor: Colors.white,
-            //     child: IconButton(
-            //       icon: Icon(
-            //         Icons.favorite,
-            //         size: 30,
-            //         color: Colors.red,
-            //       ),
-            //       onPressed: () {
-            //         // Handle button press
-            //       },
-            //     ),
-            //   ),
-            // )
           ],
         ),
       ),
     );
   }
-}
-Widget resultBox(String prefImage,String suffImage,String result)
-{
-  return Container(
-    decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20)),
-    child: Container(
-      width: 300,
-      height: 60,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black26,
-                blurRadius: 6,
-                offset: Offset(0, 2))
-          ]),
-      child: Row(
-        children: [
-          Image.asset(prefImage,height: 50,),
-          Container(
-            width: 190,
-            child: Text(
-              result,
-              style: TextStyle(
-                fontSize: 25,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          Image.asset(suffImage,height: 50,),
-        ],
-      ),
-    ),
-  );
 }

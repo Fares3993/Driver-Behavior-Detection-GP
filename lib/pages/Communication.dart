@@ -30,7 +30,7 @@ class _contact_usState extends State<contact_us> {
                     height: getHeight(context, 0.3),
                     width: getWidth(context, 0.5),
                     child: Image(
-                      image: AssetImage('lib/Images/Contact.png'),
+                      image: AssetImage('lib/Images/Contact.PNG'),
                     ),
                   ),
                   Padding(
@@ -75,19 +75,3 @@ class _contact_usState extends State<contact_us> {
   }
 }
 
-Widget ContactField(String path,String email ,BuildContext context, double iconSize)
-{
-  return Row(
-    children: [
-      Container(
-        height: iconSize,
-        child: Image(
-          image: AssetImage(path),
-        ),
-      ),
-      SizedBox(width: getWidth(context, 0.03),),
-      Text(email,style: TextStyle(fontSize: 16),),
-
-    ],
-  );
-}

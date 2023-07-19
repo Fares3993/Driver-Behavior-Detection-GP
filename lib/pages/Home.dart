@@ -5,9 +5,7 @@ import 'package:driver_behaviour_gp/pages/AlertSounds.dart';
 import 'package:driver_behaviour_gp/pages/CameraScreen.dart';
 import 'package:driver_behaviour_gp/pages/Communication.dart';
 import 'package:driver_behaviour_gp/pages/Help.dart';
-import 'package:driver_behaviour_gp/pages/email.dart';
 import 'package:driver_behaviour_gp/pages/login.dart';
-import 'package:driver_behaviour_gp/pages/videoPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:driver_behaviour_gp/my_flutter_app_icons.dart';
@@ -228,18 +226,6 @@ class _HomeState extends State<Home> {
                   SizedBox(
                     height: getHeight(context, 0.03),
                   ),
-
-                  // ElevatedButton(
-                  //   style: getButtonStyle(250, 50,Colors.black),
-                  //   child: Text(
-                  //     'Recorded Video',
-                  //     style: TextStyle(fontSize: 25,fontFamily: 'font2'),
-                  //   ),
-                  //   onPressed: () {
-                  //     //Navigator.push(context, MaterialPageRoute(builder: (context)=> EmailScreen()));
-                  //     //Navigator.pushNamed(context, '/videoPage',arguments: "Recorded Video");
-                  //   },
-                  // ),
                 ],
               ),
             ),

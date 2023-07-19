@@ -5,7 +5,6 @@ import 'package:driver_behaviour_gp/pages/register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../main.dart';
 
 class Login extends StatefulWidget {
@@ -97,7 +96,6 @@ class _LoginState extends State<Login> {
               CircleAvatar(
                 radius: 70,
                 backgroundColor: Colors.black26,
-                //HexColor("090150"),//Color(0x00021A),
                 backgroundImage: AssetImage("lib/Images/Logo.png"),
               ),
               SizedBox(
@@ -167,13 +165,6 @@ class _LoginState extends State<Login> {
                         SizedBox(
                           height: 50,
                         ),
-
-                        // TextField(
-                        //   keyboardType: TextInputType.emailAddress,
-                        //   controller: emailController,
-                        //   decoration:
-                        //       InputDecoration(hintText: 'Enter your email'),
-                        // ),
                         BuildTextField(emailController,"Enter Your Email",Icons.email,TextInputType.emailAddress),
                         SizedBox(
                           height: 15,
@@ -196,7 +187,6 @@ class _LoginState extends State<Login> {
                               Dialogue(context, 'please enter your password');
                             } else {
                               try {
-
                                 UserCredential credential =
                                     await instance.signInWithEmailAndPassword(
                                         email: emailController.text!,
