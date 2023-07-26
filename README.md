@@ -34,7 +34,7 @@ if both eyes of the driver are closed for a certain period of time, the system p
 ## Some Screenshots:
 
 <div>
-  <img src ="https://github.com/Fares3993/Driver-Behavior-Detection-GP/assets/84674642/4bf6e38a-0df9-429a-9914-60f18055c926" width = 250 height =450>
+  <img src ="https://github.com/Fares3993/Driver-Behavior-Detection-GP/assets/84674642/007a00e9-3c21-435b-8679-d89b3a6a8e71" width = 250 height =450>
   &nbsp;
   &nbsp;
 <img src ="https://github.com/Fares3993/Driver-Behavior-Detection-GP/assets/84674642/4659d3ed-01cb-4e2f-9baa-9c06cd4a8727"  width = 250 height =450>
