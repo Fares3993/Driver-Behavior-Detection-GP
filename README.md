@@ -18,7 +18,7 @@ if both eyes of the driver are closed for a certain period of time, the system p
 * Khaled Galal Yehia kandil 
 
 
-### uses:
+### Uses:
 1. Flutter Framework (Dart)
 2. Firebase, Cloud Firestore
 3. Flask Api
@@ -29,5 +29,9 @@ if both eyes of the driver are closed for a certain period of time, the system p
 * Live Detection for Driver Behavior
 * If the driver is drowsy, the system will send an email to all of the driver's contacts
 * User can add more contacts email
-* Each user Each user can choose a sound for alert 
+* Each user Each user can choose a sound for alert
+
+## Some Screenshots:
+
+
 
