@@ -100,9 +100,9 @@ if both eyes of the driver are closed for a certain period of time, the system p
 
 
 
-## App Demo:
 
-[![App Demo](https://github.com/Fares3993/Driver-Behavior-Detection-GP/blob/main/assets/84674642/4bf6e38a-0df9-429a-9914-60f18055c926.png)](https://drive.google.com/file/d/1ZerZGTy38DehoAqbOh4Du3tLksxVketJ/view?usp=sharing)
+
+## See the app demo from [here](https://drive.google.com/file/d/1ZerZGTy38DehoAqbOh4Du3tLksxVketJ/view)
 
 
 
