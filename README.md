@@ -1,6 +1,6 @@
 # Driver Behavior Detection
 <div align ="center">
- <img src ="https://github.com/Fares3993/Driver-Behavior-Detection-GP/assets/84674642/fdfd3e48-ecbb-4bca-9bba-232da449934b">
+ <img src ="https://github.com/Fares3993/Driver-Behavior-Detection-GP/assets/84674642/39f27c0f-91c0-4a3f-b019-28cdf2a8deaa">
 </div>
 
 ## ِAbout
