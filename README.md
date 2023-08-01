@@ -30,7 +30,11 @@ if both eyes of the driver are closed for a certain period of time, the system p
 * If the driver is drowsy, the system will send an email to all of the driver's contacts
 * User can add more contacts email
 * Each user Each user can choose a sound for alert
-
+### Datasets:
+1. Seatbelt Dataset
+The dataset has been sorted into two classes, one with 3500 training images of seat belts and the other with 3500 training images without seat belts. There are also 1600 images included in the dataset specifically for testing. You can access this dataset through the following link: https://www.kaggle.com/datasets/yehiahassanain/seat-belt2.
+2. Distraction Dataset
+This dataset comprises of 10 categories, with each having approximately 2400-3000 images for training purposes, as well as nearly 7K images that are unlabeled, dedicated for testing. After combining the categories for texting (left and right) and talking on the phone (left and right), the dataset is left with a total of 8 categories. You can access this dataset through the following link: https://www.kaggle.com/datasets/yehiahassanain/new-driver-behaviour22222.
 ## Some Screenshots:
 
 <div>
